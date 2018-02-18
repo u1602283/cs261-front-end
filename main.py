@@ -1,8 +1,10 @@
 import apiai
 import json
 import requests
+from DatRet import *
 
 CLIENT_ACCESS_TOKEN='ee339c04a181469aba3549870dfeca5e'
+DR = DatRet()
 
 def main(query):
     ai=apiai.ApiAI(CLIENT_ACCESS_TOKEN)
@@ -13,15 +15,53 @@ def main(query):
     res=request.getresponse()
 
     jsonres=json.loads(res.read())
-    for param in jsonres['result']['parameters']:
-        company=jsonres['result']['parameters'][param]
-        print(param+":"+company)
+
+    company=""
+    try:
+        company=jsonres['result']['parameters']['companies'].strip(".")
+    except KeyError:
+        pass
+
+    date=""
+    try:
+        date=jsonres['result']['parameters']['Date']
+        print(date)
+    except KeyError:
+        pass
+        
+    if company=="":
+        default=jsonres['result']['fulfillment']['speech']
+        print(default)
+        return
+    else:
+        print("company:"+company)
+            
     intent=jsonres['result']['metadata']['intentName']
-    message=jsonres['result']['fulfillment']['speech']
-    #print(json.dumps(jsonres, indent=4, sort_keys=True))  pretty prints the response, may come in handy
-    
-    print("intent:"+intent)
-    print(message)
-    
+    if intent=="Default Fallback Intent" or intent=="Default Welcome Intent":
+        default=jsonres['result']['fulfillment']['speech']
+        print(default)
+        return
+    else:
+        print("intent:"+intent)
+
+    #If we've reached this point, we have a company and intent (and myb date)
+    if intent=="Spot Price":
+        if date=="":
+            print(DR.stock_price(company))
+            return
+        else:
+            print(DR.stock_price(company, date))
+            return
+    elif intent=="Market Capitalisation":
+        print(DR.current_marketcap(company))
+        return
+    elif intent=="retrieve-news-company":
+        for article in DR.get_news(company):
+            print("URL:"+article['u'])
+            print("Snippit:"+article['sp'])
+            
+        return
+        
+        
 while True:
-    main(input("What's your query?\n"))
+    main(input("\n"))
