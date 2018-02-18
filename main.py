@@ -17,10 +17,11 @@ def main(query):
         company=jsonres['result']['parameters'][param]
         print(param+":"+company)
     intent=jsonres['result']['metadata']['intentName']
-
-    
+    message=jsonres['result']['fulfillment']['speech']
+    #print(json.dumps(jsonres, indent=4, sort_keys=True))  pretty prints the response, may come in handy
     
     print("intent:"+intent)
+    print(message)
     
 while True:
     main(input("What's your query?\n"))
