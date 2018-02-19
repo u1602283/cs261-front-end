@@ -155,6 +155,8 @@ class DatRet:
         now=datetime.now()
         #d2 = str(now.strftime("%Y-%m-%d"))
         daynum=abs((now - d1).days)
+        if daynum==0:
+            return "1d"
         if daynum>265:
             return str(int(float(daynum/265)+1))+"Y"
         elif daynum>30:
