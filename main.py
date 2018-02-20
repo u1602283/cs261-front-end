@@ -65,24 +65,34 @@ def main(query):
             print("Snippit:"+article['sp'])
         return
     elif intent=="Open":
-        print(DR.price_data(company, date)[0])
+        if date!="" and date!=(datetime.now()).strftime("%Y-%m-%d"):
+            print(DR.price_data(company, date)[0])
+        else:
+            print(DR.price_data_today(company)[0])
         return
     elif intent=="Close":
-        print(DR.price_data(company, date)[1])
+        if date!="" and date!=(datetime.now()).strftime("%Y-%m-%d"):
+            print(DR.price_data(company, date)[1])
+        else:
+            print(DR.price_data_today(company)[1])
         return
     elif intent=="High":
-        print(DR.price_data(company, date)[2])
+        if date!="" and date!=(datetime.now()).strftime("%Y-%m-%d"):
+            print(DR.price_data(company, date)[2])
+        else:
+            print(DR.price_data_today(company)[2])
         return
     elif intent=="Low":
-        print(DR.price_data(company, date)[3])
+        if date!="" and date!=(datetime.now()).strftime("%Y-%m-%d"):
+            print(DR.price_data(company, date)[3])
+        else:
+            print(DR.price_data_today(company)[3])
         return
     elif intent=="Volume":
-        if date!="":
+        if date!="" and date!=(datetime.now()).strftime("%Y-%m-%d"):
             print(DR.price_data(company, date)[4])
         else:
-            #Want the 24hr volume from yesterday
-            #NEEDS WORK
-            print(DR.price_data(company, (datetime.now()).strftime("%Y-%m-%d"))[4])
+            print(DR.price_data_today(company)[4])
         return
         
 while True:

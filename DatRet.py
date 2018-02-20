@@ -103,7 +103,7 @@ class DatRet:
 
     #price_data(object, sting, string)
     #The symbol should be a valid stock symbol with the FTSE100 index
-    #The date should be in %Y-%m-%d format
+    #The date should be in %Y-%m-%d format (SHOULD NOT BE THE CURRENT DAY!)
     #This function returns a (opening, closing, high, low, vol) for a given day
     def price_data(self, symbol, date):
         #Find our required time frame for data for this date to be requested
@@ -126,6 +126,43 @@ class DatRet:
         return pricetuple
         #Tuple with (opening, closing, high, low, vol) for given day
 
+    #price_data_today(object, sting)
+    #The symbol should be a valid stock symbol with the FTSE100 index
+    #This function will return the price data for the current day. This function is useful if the current trading hours are still in progress,
+    #since the price_data function requires a day to be complete to retrieve the current data.
+    def price_data_today(self, symbol):
+        self.param['q']=symbol
+        self.param['i']='60'
+        self.param['x']='LON'
+        if symbol=="INDEXFTSE":
+            self.param['x']='UKX'
+        self.param['p']='1d'
+
+        data=get_price_data(self.param)
+        #Extract data just for this day
+        #We want the data for the current day only
+        data=data[(datetime.now()).strftime("%Y-%m-%d")]
+
+        #The day open is the open of the first data piece we're given
+        dayopen=data.iloc[0]['Open']
+        #The day close is simply the current stock price
+        dayclose=self.stock_price(symbol)
+        dayhigh=0
+        daylow=0
+        dayvol=0
+
+        #We iterate through the rows of the day
+        for index,row in data.iterrows():
+            #The volume is cumulative
+            dayvol+=int(row['Volume'])
+            #For high and low we must make comparisons against our current guess and update accordingly
+            if row['Low']<daylow or daylow==0:
+                daylow=row['Low']
+            if row['High']>dayhigh:
+                dayhigh=row['High']
+
+        return (dayopen, dayclose, dayhigh, daylow, dayvol)
+    
     def current_marketcap(self, symbol):
         mktcap = get_market_cap(symbol, 'LON')
         return mktcap
@@ -164,7 +201,8 @@ class DatRet:
         else:
             return str(daynum)+"d"
 
-##dr=DatRet()
+#dr=DatRet()
+#print(dr.price_data_today("III"))
 ##now = time.time()
 ##print('dr.stock_price(symbol="III")')
 ##print(dr.stock_price(symbol="III"))
