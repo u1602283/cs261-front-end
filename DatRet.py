@@ -1,17 +1,20 @@
 from googlefinance.client import get_price_data, get_prices_data, get_prices_time_data
 from pinance import Pinance
-from datetime import datetime
+from datetime import datetime, timedelta
 from marketcapfinder import get_market_cap
 import pandas
 import time
 
 #NOTES
-#non trading days (saturdays and sundays) have no data and hence throw an error - perhaps catch errors when returned df is empty as "Data is not availible for selected timeframe"
+#WHEN WEEKEND IS REQUESTED, return close date for friday, or vol=0 [DONE]
+#CHANGE SINCE OPENING
+#IF WE GET AN INDEX ERROR ON A DATE (which must means its not a weekend and there is no data), GO TO THE PREVIOUS DATE FOR WHICH THERE IS DATA
+
+
 #start date must be before end date
-#should stock_price function add functionality to tighter time frames (ie, per-minute requests)
-#should diff function add functionality for start/end times?
 #the time_frame function can cause measurements to be very wasteful in the data we are retriving
 #should price_data have time parameter?
+###USEFUL FOR QUERIES "What was the price of - at 3pm" (would assume today)
 #round price values using decimal?
 
 
@@ -39,15 +42,28 @@ class DatRet:
                 self.param['x']='INDEXFTSE'
             self.param['p']='1d'
             data=get_price_data(self.param)
-            currprice=data.iloc[-1]['Close']
+            if time is None:
+                #If time is None too then we just want the current stock price
+                currprice=data.iloc[-1]['Close']
+            else:
+                #If we have a time, then we want the stock price at that time today
+                date=datetime.now().strftime("%Y-%m-%d")
+                #Just make a call to this function with today as the date
+                currprice=self.stock_price(symbol, date, time)
+                
         else:
+            #If we have a date on the weekend, just change it to the preceding friday
+            if datetime.strptime(date, "%Y-%m-%d").strftime("%A")=="Saturday":
+                date=(datetime.strptime(date, "%Y-%m-%d")-timedelta(days=1)).strftime("%Y-%m-%d")
+            elif datetime.strptime(date, "%Y-%m-%d").strftime("%A")=="Sunday":
+                date=(datetime.strptime(date, "%Y-%m-%d")-timedelta(days=2)).strftime("%Y-%m-%d")
             #If we do have a selected date, the find the time frame most suitable for this date
             timeamt=self.time_frame(date)
             #We only need per-day data
             self.param['i']='86400'
             #But if we have a time, then we need per-hour
             if time is not None:
-                self.param['i']='3600'
+                self.param['i']='60'
             #Our exchange
             self.param['x']='LON'
             if symbol=="UKX":
@@ -59,15 +75,33 @@ class DatRet:
             #Request data using set parameters
             data=get_price_data(self.param)
             if time is not None:
+                if datetime.now().strftime("%Y-%m-%d %H:%M:%S")==date+" "+time:
+                    return self.stock_price(symbol)
+                #If we're BEFORE trading hours
+                if datetime.strptime(time, "%H:%M:%S")<datetime.strptime("08:00:00", "%H:%M:%S"):
+                    print("Before trading hours")
+                    return self.price_data(symbol, (datetime.strptime(date, "%Y-%m-%d")-timedelta(days=1)).strftime("%Y-%m-%d"))[1] #Return closing price of the day before
+                #If it's AFTER trading hours
+                elif datetime.strptime(time, "%H:%M:%S")>datetime.strptime("16:30:00", "%H:%M:%S"):
+                    print("After trading hours")
+                    return self.price_data(symbol, (datetime.strptime(date, "%Y-%m-%d")).strftime("%Y-%m-%d"))[1] #Closing price of the current day
                 #Pandas requires us to use .loc when request hour-sensitive time series data
                 #This only returns one row which can be indexed for it's close value
+                print(data)
                 daydata=data.loc[date+" "+time]['Close']
                 currprice=daydata
             else:
-                #If we only require per-day data then we can simply index by our given date
-                daydata=data[date]
-                #And index our dataframe using .iloc, selecting the close value of the first row
-                currprice=daydata.iloc[0]['Close']
+                if datetime.now().strftime("%Y-%m-%d")==date:
+                    return self.stock_price(symbol)
+                try:
+                    #If we only require per-day data then we can simply index by our given date
+                    daydata=data[date]
+                    #And index our dataframe using .iloc, selecting the close value of the first row
+                    currprice=daydata.iloc[0]['Close']
+                except KeyError:
+                    currprice=self.stock_price(symbol, (datetime.strptime(date, "%Y-%m-%d")-timedelta(days=1)).strftime("%Y-%m-%d"))
+                except IndexError:
+                    currprice=self.stock_price(symbol, (datetime.strptime(date, "%Y-%m-%d")-timedelta(days=1)).strftime("%Y-%m-%d"))
             
         return currprice
         #date=False => current stock price
@@ -78,34 +112,54 @@ class DatRet:
     #The start should be the period of time from which the difference is required
     #The end should be the end date of the period from which the difference is required, namely after the start date
     #This function retrieves the difference in price, and percentage difference on a stock between two dates. If no end date is given, then the current date is assumed.
-    def diff(self, symbol, start, end=None):
+    def diff(self, symbol, start, starttime=None, end=None, endtime=None):
         if end is None:
             #Find the current price of the stock
             currprice=self.stock_price(symbol)
             #Find the price of the stock on our given start date
-            histprice=self.stock_price(symbol, start)
+            if starttime is None:
+                histprice=self.stock_price(symbol, start)
+            else:
+                histprice=self.stock_price(symbol, start, starttime)
             #Calculate the price difference
             pricediff=currprice-histprice
             #Calculate the percent change
             percentdiff=pricediff/histprice
         else:
             #Find the price of the stock on our start date
-            startprice=self.stock_price(symbol, start)
+            if starttime is None:
+                startprice=self.stock_price(symbol, start)
+            else:
+                startprice=self.stock_price(symbol, start, starttime)
             #Find the price of the stock on the end date
-            endprice=self.stock_price(symbol, end)
+
+            if endtime is None:
+                endprice=self.stock_price(symbol, end)
+            else:
+                endprice=self.stock_price(symbol, end, endtime)
             #Calculate the price difference of these two values
             pricediff=endprice-startprice
             #Calculate percentage change
             percentdiff=pricediff/startprice
         return (pricediff, percentdiff)
         #end=False => difference in (price, percentage) between start and current
-        #end!=False => difference in (price, percentage) between start and end dates
+        #end!=False => difference in (price, percentage) between start and end dates     
 
     #price_data(object, sting, string)
     #The symbol should be a valid stock symbol with the FTSE100 index
     #The date should be in %Y-%m-%d format (SHOULD NOT BE THE CURRENT DAY!)
     #This function returns a (opening, closing, high, low, vol) for a given day
     def price_data(self, symbol, date):
+        #If the date given to us is a weekend
+        weekend=False;
+        if datetime.strptime(date, "%Y-%m-%d").strftime("%A")=="Saturday":
+            date=(datetime.strptime(date, "%Y-%m-%d")-timedelta(days=1)).strftime("%Y-%m-%d")
+            weekend=True;
+        elif datetime.strptime(date, "%Y-%m-%d").strftime("%A")=="Sunday":
+            date=(datetime.strptime(date, "%Y-%m-%d")-timedelta(days=2)).strftime("%Y-%m-%d")
+            weekend=True;
+
+        
         #Find our required time frame for data for this date to be requested
         timeamt=self.time_frame(date)
         #Update params of our request
@@ -120,10 +174,18 @@ class DatRet:
         #Make request to API
         data=get_price_data(self.param)
         #Extract data just for this day
-        data=data[date]
-        #Construct tuple with required data from indices
-        pricetuple=(data.iloc[0]['Open'],data.iloc[0]['Close'],data.iloc[0]['High'],data.iloc[0]['Low'], data.iloc[0]['Volume'])
-        return pricetuple
+        try:
+            data=data[date]
+            #Construct tuple with required data from indices
+            pricetuple=(data.iloc[0]['Open'],data.iloc[0]['Close'],data.iloc[0]['High'],data.iloc[0]['Low'], data.iloc[0]['Volume'])
+            if weekend:
+                #If its the weekend, then open, close high and low is going to be the close price from friday, and the volume traded is going to be 0
+                pricetuple=(data.iloc[0]['Close'],data.iloc[0]['Close'],data.iloc[0]['Close'],data.iloc[0]['Close'], 0)
+            return pricetuple
+        except KeyError:
+            return self.price_data(symbol, (datetime.strptime(date, "%Y-%m-%d")-timedelta(days=1)).strftime("%Y-%m-%d"))
+        except IndexError:
+            return self.price_data(symbol, (datetime.strptime(date, "%Y-%m-%d")-timedelta(days=1)).strftime("%Y-%m-%d"))
         #Tuple with (opening, closing, high, low, vol) for given day
 
     #price_data_today(object, sting)
@@ -192,17 +254,22 @@ class DatRet:
         now=datetime.now()
         #d2 = str(now.strftime("%Y-%m-%d"))
         daynum=abs((now - d1).days)
-        if daynum==0:
-            return "1d"
-        if daynum>265:
+        if daynum<2:
+            return "2d"
+        if daynum>365:
             return str(int(float(daynum/265)+1))+"Y"
         elif daynum>30:
             return str(int(float(daynum/30)+1))+"M"
         else:
             return str(daynum)+"d"
 
-#dr=DatRet()
-#print(dr.price_data_today("III"))
+    def roundTime(self, dt=None, roundTo=60):
+       if dt == None : dt = datetime.datetime.now()
+       seconds = (dt.replace(tzinfo=None) - dt.min).seconds
+       rounding = (seconds+roundTo/2) // roundTo * roundTo
+       return dt + datetime.timedelta(0,rounding-seconds,-dt.microsecond)
+
+##dr=DatRet()
 ##now = time.time()
 ##print('dr.stock_price(symbol="III")')
 ##print(dr.stock_price(symbol="III"))

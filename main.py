@@ -7,7 +7,11 @@ from DatRet import *
 CLIENT_ACCESS_TOKEN='ee339c04a181469aba3549870dfeca5e'
 DR = DatRet()
 
+#Need default return for if the date is in the future
 def main(query):
+    if query=='':
+        return
+
     ai=apiai.ApiAI(CLIENT_ACCESS_TOKEN)
     request=ai.text_request()
     request.lang='en'
@@ -27,7 +31,24 @@ def main(query):
     try:
         date=jsonres['result']['parameters']['date']
         print(date)
+        if datetime.strptime(date, "%Y-%m-%d")>datetime.now():
+            print("At this point, I am unable to predict the future.")
+            return
     except KeyError:
+        pass
+    except ValueError:
+        pass
+
+    time=""
+    try:
+        time=jsonres['result']['parameters']['time']
+        print(time)
+        if datetime.strptime(time, "%H:%M:%S")>datetime.now():
+            print("At this point, I am unable to predict the future.")
+            return
+    except KeyError:
+        pass
+    except ValueError:
         pass
         
     if company=="":
@@ -50,11 +71,17 @@ def main(query):
     #What do we do if they request the closing/opening on a weekend?
     #need to make sure date isn't in the future!
     if intent=="Spot Price":
-        if date=="":
+        if date=="" and time=="":
             print(DR.stock_price(company))
             return
-        else:
+        elif date=="":
+            print(DR.stock_price(company, time=time))
+            return
+        elif time=="":
             print(DR.stock_price(company, date))
+            return
+        else:
+            print(DR.stock_price(company, date, time))
             return
     elif intent=="Market Capitalisation":
         print(DR.current_marketcap(company))
@@ -72,6 +99,7 @@ def main(query):
         return
     elif intent=="Close":
         if date!="" and date!=(datetime.now()).strftime("%Y-%m-%d"):
+            print(date)
             print(DR.price_data(company, date)[1])
         else:
             print(DR.price_data_today(company)[1])
@@ -94,6 +122,30 @@ def main(query):
         else:
             print(DR.price_data_today(company)[4])
         return
-        
+    elif intent=="Percentage Change":
+        #print(jsonres['result']['parameters']['date-time'])
+        startdt=list(jsonres['result']['parameters']['date-time'])[0]
+        print(startdt)
+        try:
+            enddt=list(jsonres['result']['parameters']['date-time'])[1]
+        except IndexError:
+            enddt=""
+        print(enddt)
+        #If we detect a "/", then we do the difference between the two values
+        if "/" in startdt:
+            #If its dates, just grab the difference between the dates
+            print(DR.diff(company, start=startdt.split("/")[0], end=startdt.split("/")[1]))
+            return
+            #If its times, (hopefully we get dates too), and5 grab the differnces
+            #Define a new value in the intent for time content(?)
+        else:
+            #If we don't detect a "/", and there's just one date(time), then get the difference between that date(time) and now
+            if enddt=="":
+                print(DR.diff(company, start=startdt))
+            #If we don't detect a "/", and there are two date(times)s get the diffence between those two date(time)s 
+            else:
+                print(DR.diff(company, start=startdt, end=enddt))
+            return
+    
 while True:
     main(input("\n"))
