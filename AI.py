@@ -273,6 +273,7 @@ class AI:
 			result.append(top)
 			scores[top] = 0
 		return result
+	# Haha
 		
 	# Adds a query to the search history, returns 1 on success, 0 on failure
 	def addQuery(self, newQuery):
