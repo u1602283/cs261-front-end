@@ -7,6 +7,7 @@ class NewsSentiment:
 
     def getPolarity(self, url):
 
+        
         sentiment = client.Sentiment({'mode': 'document', 'url': url})
 
         if (sentiment['polarity'] == 'positive'):
