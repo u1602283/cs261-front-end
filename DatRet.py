@@ -87,7 +87,6 @@ class DatRet:
                     return self.price_data(symbol, (datetime.strptime(date, "%Y-%m-%d")).strftime("%Y-%m-%d"))[1] #Closing price of the current day
                 #Pandas requires us to use .loc when request hour-sensitive time series data
                 #This only returns one row which can be indexed for it's close value
-                print(data)
                 daydata=data.loc[date+" "+time]['Close']
                 currprice=daydata
             else:
