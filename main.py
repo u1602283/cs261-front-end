@@ -3,9 +3,11 @@ import json
 import requests
 from datetime import datetime, timedelta
 from DatRet import *
+from NewsSentiment import *
 
 CLIENT_ACCESS_TOKEN='ee339c04a181469aba3549870dfeca5e'
 DR = DatRet()
+NS = NewsSentiment()
 
 #Need default return for if the date is in the future
 def main(query):
@@ -90,6 +92,13 @@ def main(query):
         for article in DR.get_news(company):
             print("URL:"+article['u'])
             print("Snippit:"+article['sp'])
+            polarity = NS.getPolarity(article['u'])
+            if polarity==1:
+                print('This article seems to be positive')
+            elif polarity==-1:
+                print('This article seems to be negative')
+            else:
+                print('This article seems to be neutral')
         return
     elif intent=="Open":
         if date!="" and date!=(datetime.now()).strftime("%Y-%m-%d"):
