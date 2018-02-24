@@ -92,13 +92,8 @@ def main(query):
         for article in DR.get_news(company):
             print("URL:"+article['u'])
             print("Snippit:"+article['sp'])
-            polarity = NS.getPolarity(article['u'])
-            if polarity==1:
-                print('This article seems to be positive')
-            elif polarity==-1:
-                print('This article seems to be negative')
-            else:
-                print('This article seems to be neutral')
+            print(NS.getPolarity(article['u']))
+            
         return
     elif intent=="Open":
         if date!="" and date!=(datetime.now()).strftime("%Y-%m-%d"):
