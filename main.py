@@ -132,31 +132,32 @@ def main(query):
             print(DR.price_data_today(company)[4])
             return DR.price_data_today(company)[4]
     elif intent=="Percentage Change":
-        #print(jsonres['result']['parameters']['date-time'])
-        startdt=list(jsonres['result']['parameters']['date-time'])[0]
-        print(startdt)
-        try:
-            enddt=list(jsonres['result']['parameters']['date-time'])[1]
-        except IndexError:
-            enddt=""
-        print(enddt)
-        #If we detect a "/", then we do the difference between the two values
-        if "/" in startdt:
-            #If its dates, just grab the difference between the dates
-            print(DR.diff(company, start=startdt.split("/")[0], end=startdt.split("/")[1]))
-            return DR.diff(company, start=startdt.split("/")[0], end=startdt.split("/")[1])
-            #If its times, (hopefully we get dates too), and5 grab the differnces
-            #Define a new value in the intent for time content(?)
+        listinput=list(jsonres['result']['parameters']['date-time'])
+        startenddates=extract_diff_dates(listinput)
+        print(startenddates)
+        startdt=startenddates[0]
+        enddt=startenddates[1]
+        
+        if enddt=="":
+            print(DR.diff(company, start=startdt))
+            return DR.diff(company, start=startdt)
         else:
-            #If we don't detect a "/", and there's just one date(time), then get the difference between that date(time) and now
-            if enddt=="":
-                print(DR.diff(company, start=startdt))
-                return DR.diff(company, start=startdt)
-            #If we don't detect a "/", and there are two date(times)s get the diffence between those two date(time)s 
-            else:
-                print(DR.diff(company, start=startdt, end=enddt))
-                return DR.diff(company, start=startdt, end=enddt)
+            print(DR.diff(company, start=startdt, end=enddt))
+            return DR.diff(company, start=startdt, end=enddt)
     return ("This is the catch-all return at the end of the main function")
+
+#Function for determining start/end dates of difference function
+def extract_diff_dates(listinput):
+    startdt=listinput[0]
+    try:
+        enddt=listinput[1]
+    except IndexError:
+        enddt=""
+    if "/" in startdt:
+        enddt=startdt.split("/")[1]
+        startdt=startdt.split("/")[0]
+    return (startdt, enddt)
+    
     
 #while True:
 #    main(input("\n"))
