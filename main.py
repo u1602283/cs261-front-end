@@ -9,7 +9,6 @@ CLIENT_ACCESS_TOKEN='ee339c04a181469aba3549870dfeca5e'
 DR = DatRet()
 NS = NewsSentiment()
 
-#Need default return for if the date is in the future
 def main(query):
     if query=='':
         return
@@ -35,7 +34,7 @@ def main(query):
         print(date)
         if datetime.strptime(date, "%Y-%m-%d")>datetime.now():
             print("At this point, I am unable to predict the future.")
-            return
+            return ("At this point, I am unable to predict the future.")
     except KeyError:
         pass
     except ValueError:
@@ -47,7 +46,7 @@ def main(query):
         print(time)
         if datetime.strptime(time, "%H:%M:%S")>datetime.now():
             print("At this point, I am unable to predict the future.")
-            return
+            return ("At this point, I am unable to predict the future.")
     except KeyError:
         pass
     except ValueError:
@@ -56,7 +55,7 @@ def main(query):
     if company=="":
         default=jsonres['result']['fulfillment']['speech']
         print(default)
-        return
+        return default
     else:
         print("company:"+company)
             
@@ -64,68 +63,74 @@ def main(query):
     if intent=="Default Fallback Intent" or intent=="Default Welcome Intent":
         default=jsonres['result']['fulfillment']['speech']
         print(default)
-        return
+        return default
     else:
         print("intent:"+intent)
 
     #If we've reached this point, we have a company and intent (and myb date)
     #Wrap all of this in a try catch and excuse ourselves for not having the data?
-    #What do we do if they request the closing/opening on a weekend?
-    #need to make sure date isn't in the future!
     if intent=="Spot Price":
         if date=="" and time=="":
             print(DR.stock_price(company))
-            return
+            return DR.stock_price(company)
         elif date=="":
             print(DR.stock_price(company, time=time))
-            return
+            return DR.stock_price(company, time=time)
         elif time=="":
             print(DR.stock_price(company, date))
-            return
+            return DR.stock_price(company, date)
         else:
             print(DR.stock_price(company, date, time))
-            return
+            return DR.stock_price(company, date, time)
     elif intent=="Market Capitalisation":
         print(DR.current_marketcap(company))
-        return
+        return DR.current_marketcap(company)
     elif intent=="retrieve-news-company":
+        returnarray=[]
         for article in DR.get_news(company):
             print("URL:"+article['u'])
             print("Snippit:"+article['sp'])
-            print(NS.getPolarity(article['u']))
-            
-        return
+            polarity=NS.getPolarity(article['u'])
+            print(polarity)
+            returnarray.append((article['u'], article['sp'], polarity))
+        return returnarray
     elif intent=="Open":
         if date!="" and date!=(datetime.now()).strftime("%Y-%m-%d"):
             print(DR.price_data(company, date)[0])
+            return DR.price_data(company, date)[0]
         else:
             print(DR.price_data_today(company)[0])
-        return
+            return DR.price_data_today(company)[0]
     elif intent=="Close":
         if date!="" and date!=(datetime.now()).strftime("%Y-%m-%d"):
             print(date)
             print(DR.price_data(company, date)[1])
+            return DR.price_data(company, date)[1]
         else:
             print(DR.price_data_today(company)[1])
-        return
+            return DR.price_data_today(company)[1]
     elif intent=="High":
         if date!="" and date!=(datetime.now()).strftime("%Y-%m-%d"):
             print(DR.price_data(company, date)[2])
+            return DR.price_data(company, date)[2]
         else:
             print(DR.price_data_today(company)[2])
+            return DR.price_data_today(company)[2]
         return
     elif intent=="Low":
         if date!="" and date!=(datetime.now()).strftime("%Y-%m-%d"):
             print(DR.price_data(company, date)[3])
+            return DR.price_data(company, date)[3]
         else:
             print(DR.price_data_today(company)[3])
-        return
+            return DR.price_data_today(company)[3]
     elif intent=="Volume":
         if date!="" and date!=(datetime.now()).strftime("%Y-%m-%d"):
             print(DR.price_data(company, date)[4])
+            return DR.price_data(company, date)[4]
         else:
             print(DR.price_data_today(company)[4])
-        return
+            return DR.price_data_today(company)[4]
     elif intent=="Percentage Change":
         #print(jsonres['result']['parameters']['date-time'])
         startdt=list(jsonres['result']['parameters']['date-time'])[0]
@@ -139,17 +144,19 @@ def main(query):
         if "/" in startdt:
             #If its dates, just grab the difference between the dates
             print(DR.diff(company, start=startdt.split("/")[0], end=startdt.split("/")[1]))
-            return
+            return DR.diff(company, start=startdt.split("/")[0], end=startdt.split("/")[1])
             #If its times, (hopefully we get dates too), and5 grab the differnces
             #Define a new value in the intent for time content(?)
         else:
             #If we don't detect a "/", and there's just one date(time), then get the difference between that date(time) and now
             if enddt=="":
                 print(DR.diff(company, start=startdt))
+                return DR.diff(company, start=startdt)
             #If we don't detect a "/", and there are two date(times)s get the diffence between those two date(time)s 
             else:
                 print(DR.diff(company, start=startdt, end=enddt))
-            return
+                return DR.diff(company, start=startdt, end=enddt)
+    return ("This is the catch-all return at the end of the main function")
     
-while True:
-    main(input("\n"))
+#while True:
+#    main(input("\n"))
