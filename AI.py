@@ -33,7 +33,7 @@ class AI:
 		# Total up scores
 		weight = 1
 		for line in self.historyList:
-			category = self.code_cat[line]
+			category = Dict.code_cat[line]
 			if not line in scores:
 				scores[category] = 0
 			scores[category] += weight
@@ -49,9 +49,7 @@ class AI:
 		# If the list is empty
 		if len(self.historyList) == 0:
 			return []
-		{a: 3
-        b: 4}
-
+            
 		# Set to store weights
 		scores = {}
 
@@ -59,7 +57,7 @@ class AI:
         # Separate method?
 		weight = 1
 		for line in self.historyList:
-			category = self.code_cat[line]
+			category = Dict.code_cat[line]
 			if not line in scores:
 				scores[category] = 0
 			scores[category] += weight
@@ -77,7 +75,7 @@ class AI:
 
 	# Adds a query to the search history, returns 1 on success, 0 on failure
 	def addQuery(self, newQuery):
-		if newQuery in self.code_cat: # Check code exists
+		if newQuery in Dict.code_cat: # Check code exists
 			self.historyList = [newQuery] + self.historyList
 			self.historyList = self.historyList[:self.ENTRIES]
 			return 1
@@ -95,8 +93,8 @@ class AI:
 	# Return a list containing codes within given category
 	def getCodes(self, category):
 		result = []
-		for code in self.code_cat:
-			if self.code_cat[code] == category:
+		for code in Dict.code_cat:
+			if Dict.code_cat[code] == category:
 				result.append(code)
 		return result
 
