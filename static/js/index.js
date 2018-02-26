@@ -25,7 +25,7 @@ function newReply(message) {
   // console.log("Request Prepped");
   // response.send(message);
   // console.log("Request Sent");
-  fetch('http://0.0.0.0:8080', {
+  fetch('/', {
     method: 'POST',
     body: JSON.stringify({
       type: 'newMessage',
@@ -55,7 +55,7 @@ function suggestMessages() {
   //     $('<li class="suggested">' + request.responseText + '</li>').appendTo($('.messages ul'));
   //   }
   // }
-  fetch('http://0.0.0.0:8080', {
+  fetch('/', {
     method: 'POST',
     body: JSON.stringify({
       type: 'suggestMessages',
