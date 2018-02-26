@@ -1,9 +1,11 @@
 from DatRet import DatRet
+from datetime import date, timedelta
 class AI:
 	NUM_CATEGORIES = 34 # The number of categories, could do length of dictionary
 	NUM_ANOMALIES = 2 # The number of top categories to search for anomalies
 	MULTIPLIER = 0.9 # Affects weighting, lower number will prioritise newer queries
 	ENTRIES = 20 # The number of entries to read from the file/max entries
+	ANOMALY_THREASHOLD = 0.05
 	
 	code_cat = { # Assigns a category to each stock code
 		"AAL":"Mining",
@@ -273,7 +275,6 @@ class AI:
 			result.append(top)
 			scores[top] = 0
 		return result
-	# Haha
 		
 	# Adds a query to the search history, returns 1 on success, 0 on failure
 	def addQuery(self, newQuery):
@@ -291,13 +292,32 @@ class AI:
 	# Return a list containing the history
 	def getList(self):
 		return self.historyList
+	
+	# Return a list containing codes within given category
+	def getCodes(self, category):
+		result = []
+		for code in self.code_cat:
+			if self.code_cat[code] == category:
+				result.append(code)
+		return result
 		
 	def detectAnomalies(self):
 		dr = DatRet()
 		result = []
-#		for line in suggestCategories(NUM_ANOMALIES):
-#			if anomalous:
-#				result.append(line)
+		
+		for line in self.suggestCategories(self.NUM_ANOMALIES):
+			print(line)
+			for code in self.getCodes(line):
+				print(code)
+				yesterday = date.today() - timedelta(1)
+				day = yesterday.strftime('%Y-%m-%d')
+				print(day)
+				print('print(dr.diff(symbol="code", start=day))')
+				data = dr.diff(symbol=code, start=day)
+				print(data)
+				if abs(data[1]) > self.ANOMALY_THREASHOLD:
+					print(code + " is anomalous")
+					result.append(line)
 		return result
 		
 	# Writes the list to a file
