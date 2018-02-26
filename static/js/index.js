@@ -74,8 +74,18 @@ function suggestMessages() {
 
 $('.suggest').click(function() {
   //Send suggested message to api
-  //Print response
-  newReply();
+  message = $(".suggest input").val();
+	if($.trim(message) == '') {
+		return false;
+	}
+  //Picture needs changing to something for the user
+	$('<li class="sent"><img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>' + message + '</p></li>').appendTo($('.messages > ul'));
+	$('.message-input input').val(null);
+	$(".messages").animate({ scrollTop: $(document).height() }, "fast");
+
+  newReply(message);
+  suggestMessages();
+
 });
 
 $('.submit').click(function() {
