@@ -6,8 +6,7 @@ from Dict import code_cat
 import pandas
 import time
 
-###NOTES###
-#SECTOR NEWS
+###TO ADD/CHANGE###
 #CHANGE SINCE OPENING
 #ANY DATES REQUESTED ON A STOCK MUST BE AFTER THEY OPENED
 
