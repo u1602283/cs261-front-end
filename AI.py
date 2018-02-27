@@ -7,10 +7,10 @@ class AI:
 	NUM_ANOMALIES = 2 # The number of top categories to search for anomalies
 	MULTIPLIER = 0.9 # Affects weighting, lower number will prioritise newer queries
 	ENTRIES = 20 # The number of entries to read from the file/max entries
-	ANOMALY_THREASHOLD = 0.05
-
+	ANOMALY_THREASHOLD = 0.05 # Threashold to 
+	
 	historyList = []
-
+	
 	# Initialise
 	def __init__(self):
 		try:
@@ -20,16 +20,16 @@ class AI:
 		except FileNotFoundError:
 			print("File not found")
 			self.historyList = []
-
+			
 	# Returns a string of the highest weighted category
 	def suggestCategory(self):
 		# If the list is empty
 		if len(self.historyList) == 0:
 			return ""
-
+			
 		# Dictionary to store weights
 		scores = {}
-
+		
 		# Total up scores
 		weight = 1
 		for line in self.historyList:
@@ -38,23 +38,22 @@ class AI:
 				scores[category] = 0
 			scores[category] += weight
 			weight = weight * self.MULTIPLIER
-
+			
 		# Get the index of highest score
 		result = max(scores, key=scores.get)
 		return result
-
-
+		
 	# Returns a string of the highest weighted category
 	def suggestCategories(self, amount):
 		# If the list is empty
 		if len(self.historyList) == 0:
 			return []
-            
+			
 		# Set to store weights
 		scores = {}
-
+		
 		# Total up scores
-        # Separate method?
+		# Separate method?
 		weight = 1
 		for line in self.historyList:
 			category = Dict.code_cat[line]
@@ -62,7 +61,7 @@ class AI:
 				scores[category] = 0
 			scores[category] += weight
 			weight = weight * self.MULTIPLIER
-
+			
 		# Get highest scores
 		result = []
 		for i in range(int(amount)):
@@ -72,7 +71,7 @@ class AI:
 			result.append(top)
 			scores[top] = 0
 		return result
-
+		
 	# Adds a query to the search history, returns 1 on success, 0 on failure
 	def addQuery(self, newQuery):
 		if newQuery in Dict.code_cat: # Check code exists
@@ -81,15 +80,15 @@ class AI:
 			return 1
 		else:
 			return 0
-
+			
 	# Clear the history
 	def clearHistory(self):
 		self.historyList = []
-
+		
 	# Return a list containing the history
 	def getList(self):
 		return self.historyList
-
+		
 	# Return a list containing codes within given category
 	def getCodes(self, category):
 		result = []
@@ -97,11 +96,12 @@ class AI:
 			if Dict.code_cat[code] == category:
 				result.append(code)
 		return result
-
+		
+	# Return a sorted list of anomalous company codes
 	def detectAnomalies(self):
 		dr = DatRet()
 		result = []
-
+		
 		for line in self.suggestCategories(self.NUM_ANOMALIES):
 			print(line)
 			for code in self.getCodes(line):
@@ -114,11 +114,16 @@ class AI:
 				print(data)
 				if abs(data[1]) > self.ANOMALY_THREASHOLD:
 					print(code + " is anomalous")
-					result.append(line)
+					result.append([code, data[1]])
+		print(result)
+		result.sort(key = lambda x: abs(x[1]), reverse = True)
+		print(result)
 		return result
-
+		
 	# Writes the list to a file
 	def writeToFile(self):
 		with open("history", "w") as historyFile:
 			for line in self.historyList:
 				historyFile.write(line + "\n")
+#ai = AI()
+#ai.detectAnomalies()
