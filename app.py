@@ -1,6 +1,6 @@
 import web
 import json
-
+from main import *
 urls = (
     '/', 'index'
 )
@@ -14,9 +14,11 @@ class index:
     def POST(self):
         data = json.loads(web.data())
         print(data)
+        #Check for the type of request sent
         if data['type'] == "newMessage":
             #Handling for a message
-            return data['message']
+            return main(data['message'])
+            #return data['message']
         elif data['type'] == 'suggestMessages':
             #Handle suggested messages
             return data['message']
