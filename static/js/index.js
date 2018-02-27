@@ -6,7 +6,7 @@ function newMessage(message) {
 		return false;
 	}
   //Picture needs changing to something for the user
-	$('<li class="sent"><img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>' + message + '</p></li>').appendTo($('.messages > ul'));
+	$('<li class="sent"><img src="https://i.imgur.com/z12PaJ6.png" alt="" /><p>' + message + '</p></li>').appendTo($('.messages > ul'));
 	$('.message-input input').val(null);
 	$(".messages").animate({ scrollTop: $(document).height() }, "fast");
 };
@@ -81,7 +81,7 @@ $('.suggested ul li').click(function(e) {
 		return false;
 	}
   //Picture needs changing to something for the user
-	$('<li class="sent"><img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>' + message + '</p></li>').appendTo($('.messages > ul'));
+	$('<li class="sent"><img src="https://i.imgur.com/z12PaJ6.png" alt="" /><p>' + message + '</p></li>').appendTo($('.messages > ul'));
 	$('.message-input input').val(null);
 	$(".messages").animate({ scrollTop: $(document).height() }, "fast");
 
