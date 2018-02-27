@@ -2,6 +2,7 @@ from googlefinance.client import get_price_data, get_prices_data, get_prices_tim
 from pinance import Pinance
 from datetime import datetime, timedelta
 from marketcapfinder import get_market_cap
+from Dict import code_cat
 import pandas
 import time
 
@@ -238,7 +239,14 @@ class DatRet:
         #array of dictionary entries, each with a news story, and metadata
 
     def get_news_cat(self, category):
-        return
+        newsarray=[]
+        for item in code_cat.items():
+            if item[1]==category:
+                #Set our pinance variable
+                stock=Pinance("LON:"+item[0])
+                stock.get_news()
+                newsarray.extend(stock.news_data)
+        return newsarray
         
     def time_frame(self, d1):
         d1 = datetime.strptime(d1, "%Y-%m-%d")

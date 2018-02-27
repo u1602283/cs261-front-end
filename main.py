@@ -28,6 +28,12 @@ def main(query):
     except KeyError:
         pass
 
+    sector=""
+    try:
+        sector=jsonres['result']['parameters']['sectors']
+    except KeyError:
+        pass
+
     date=""
     try:
         date=jsonres['result']['parameters']['date']
@@ -52,12 +58,15 @@ def main(query):
     except ValueError:
         pass
         
-    if company=="":
+    if company=="" and sector=="":
         default=jsonres['result']['fulfillment']['speech']
         print(default)
         return default
     else:
-        print("company:"+company)
+        if sector=="":
+            print("company:"+company)
+        else:
+            print("sector:"+sector)
             
     intent=jsonres['result']['metadata']['intentName']
     if intent=="Default Fallback Intent" or intent=="Default Welcome Intent":
@@ -88,6 +97,15 @@ def main(query):
     elif intent=="retrieve-news-company":
         returnarray=[]
         for article in DR.get_news(company):
+            print("URL:"+article['u'])
+            print("Snippit:"+article['sp'])
+            polarity=NS.getPolarity(article['u'])
+            print(polarity)
+            returnarray.append((article['u'], article['sp'], polarity))
+        return returnarray
+    elif intent=="retrieve-news-sector":
+        returnarray=[]
+        for article in DR.get_news_cat(sector):
             print("URL:"+article['u'])
             print("Snippit:"+article['sp'])
             polarity=NS.getPolarity(article['u'])
