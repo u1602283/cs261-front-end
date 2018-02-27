@@ -5,18 +5,10 @@ from marketcapfinder import get_market_cap
 import pandas
 import time
 
-#NOTES
-#WHEN WEEKEND IS REQUESTED, return close date for friday, or vol=0 [DONE]
+###NOTES###
+#SECTOR NEWS
 #CHANGE SINCE OPENING
-#IF WE GET AN INDEX ERROR ON A DATE (which must means its not a weekend and there is no data), GO TO THE PREVIOUS DATE FOR WHICH THERE IS DATA
-
-
-#start date must be before end date
-#the time_frame function can cause measurements to be very wasteful in the data we are retriving
-#should price_data have time parameter?
-###USEFUL FOR QUERIES "What was the price of - at 3pm" (would assume today)
-#round price values using decimal?
-
+#ANY DATES REQUESTED ON A STOCK MUST BE AFTER THEY OPENED
 
 class DatRet:
     param = {
