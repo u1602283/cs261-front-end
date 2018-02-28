@@ -4,10 +4,12 @@ import requests
 from datetime import datetime, timedelta
 from DatRet import *
 from NewsSentiment import *
+from AI import *
 
 CLIENT_ACCESS_TOKEN='ee339c04a181469aba3549870dfeca5e'
 DR = DatRet()
 NS = NewsSentiment()
+a = AI()
 
 def main(query):
     if query=='':
@@ -25,6 +27,8 @@ def main(query):
     company=""
     try:
         company=jsonres['result']['parameters']['companies'].strip(".")
+        if company != "":
+            a.addQuery(company)
     except KeyError:
         pass
 
@@ -57,7 +61,7 @@ def main(query):
         pass
     except ValueError:
         pass
-        
+
     if company=="" and sector=="":
         default=jsonres['result']['fulfillment']['speech']
         print(default)
@@ -67,7 +71,7 @@ def main(query):
             print("company:"+company)
         else:
             print("sector:"+sector)
-            
+
     intent=jsonres['result']['metadata']['intentName']
     if intent=="Default Fallback Intent" or intent=="Default Welcome Intent":
         default=jsonres['result']['fulfillment']['speech']
@@ -155,7 +159,7 @@ def main(query):
         print(startenddates)
         startdt=startenddates[0]
         enddt=startenddates[1]
-        
+
         if enddt=="":
             print(DR.diff(company, start=startdt))
             return DR.diff(company, start=startdt)
@@ -175,7 +179,16 @@ def extract_diff_dates(listinput):
         enddt=startdt.split("/")[1]
         startdt=startdt.split("/")[0]
     return (startdt, enddt)
-    
-    
+
+def suggestCategories():
+    return a.suggestCategories(3)
+
+def detectAnomalies():
+    anomalies = a.detectAnomalies()
+    return anomalies
+
+def writeToFile():
+    a.writeToFile()
+    return
 #while True:
 #    main(input("\n"))
