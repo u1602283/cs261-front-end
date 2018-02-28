@@ -3,16 +3,22 @@ from datetime import date, timedelta
 import Dict
 
 class AI:
-	NUM_CATEGORIES = 34 # The number of categories, could do length of dictionary
-	NUM_ANOMALIES = 2 # The number of top categories to search for anomalies
-	MULTIPLIER = 0.9 # Affects weighting, lower number will prioritise newer queries
-	ENTRIES = 20 # The number of entries to read from the file/max entries
-	ANOMALY_THREASHOLD = 0.05 # Threashold to 
 	
 	historyList = []
+	NUM_CATEGORIES = 34 # The number of categories, could do length of dictionary
 	
 	# Initialise
-	def __init__(self):
+	def __init__(
+			self,
+			NUM_ANOMALIES = 2, # The number of top categories to search for anomalies
+			MULTIPLIER = 0.9, # Affects weighting, lower number will prioritise newer queries
+			ENTRIES = 20, # The number of entries to read from the file/max entries
+			ANOMALY_THREASHOLD = 0.05 # Threashold to identify as anomaly
+			):
+		self.NUM_ANOMALIES = NUM_ANOMALIES
+		self.MULTIPLIER = MULTIPLIER
+		self.ENTRIES = ENTRIES
+		self.ANOMALY_THREASHOLD = ANOMALY_THREASHOLD
 		try:
 			with open("history", "r") as historyFile:
 				self.historyList = historyFile.read().splitlines() # TODO Should find a way to read a given amount of lines and stop if not enough as opposed to reading whole file
@@ -115,6 +121,7 @@ class AI:
 				if abs(data[1]) > self.ANOMALY_THREASHOLD:
 					print(code + " is anomalous")
 					result.append([code, data[1]])
+				print()
 		print(result)
 		result.sort(key = lambda x: abs(x[1]), reverse = True)
 		print(result)
@@ -122,8 +129,8 @@ class AI:
 		
 	# Writes the list to a file
 	def writeToFile(self):
+		print("Writing to file..")
 		with open("history", "w") as historyFile:
 			for line in self.historyList:
+				print("Writing line: " + line)
 				historyFile.write(line + "\n")
-#ai = AI()
-#ai.detectAnomalies()
