@@ -28,11 +28,11 @@ try:
                 #Handle suggested messages
                 #return a.suggestCategories(self, 2)
                 categories = suggestCategories()
-                print(categories)
-                return data['message']
+                return categories
             elif data['type'] == 'detectAnomalies':
                 #return a.detectAnomalies(self)
-                return data['message']
+                anomalies = detectAnomalies()
+                return anomalies
 
     if __name__ == "__main__":
         app.run()
