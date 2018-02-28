@@ -155,6 +155,10 @@ def main(query):
             return DR.price_data_today(company)[4]
     elif intent=="Percentage Change":
         listinput=list(jsonres['result']['parameters']['date-time'])
+        if listinput==[]:
+            default=jsonres['result']['fulfillment']['speech']
+            print(default)
+            return default
         startenddates=extract_diff_dates(listinput)
         print(startenddates)
         startdt=startenddates[0]
