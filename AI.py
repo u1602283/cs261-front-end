@@ -5,17 +5,17 @@ import Dict
 class AI:
 	
 	historyList = []
-	NUM_CATEGORIES = 34 # The number of categories, could do length of dictionary
+	TOTAL_CATEGORIES = 34 # The number of categories, could do length of dictionary
 	
 	# Initialise
 	def __init__(
 			self,
-			NUM_ANOMALIES = 2, # The number of top categories to search for anomalies
+			NUM_CATEGORIES = 2, # The number of top categories to search for anomalies
 			MULTIPLIER = 0.9, # Affects weighting, lower number will prioritise newer queries
 			ENTRIES = 20, # The number of entries to read from the file/max entries
 			ANOMALY_THREASHOLD = 0.05 # Threashold to identify as anomaly
 			):
-		self.NUM_ANOMALIES = NUM_ANOMALIES
+		self.NUM_CATEGORIES = NUM_CATEGORIES
 		self.MULTIPLIER = MULTIPLIER
 		self.ENTRIES = ENTRIES
 		self.ANOMALY_THREASHOLD = ANOMALY_THREASHOLD
@@ -83,8 +83,10 @@ class AI:
 		if newQuery in Dict.code_cat: # Check code exists
 			self.historyList = [newQuery] + self.historyList
 			self.historyList = self.historyList[:self.ENTRIES]
+			print("Added " + newQuery + ": " + Dict.code_name[newQuery])
 			return 1
 		else:
+			print(newQuery + " is not a valid company code")
 			return 0
 			
 	# Clear the history
@@ -108,7 +110,7 @@ class AI:
 		dr = DatRet()
 		result = []
 		
-		for line in self.suggestCategories(self.NUM_ANOMALIES):
+		for line in self.suggestCategories(self.NUM_CATEGORIES):
 			print(line)
 			for code in self.getCodes(line):
 				print(code)
@@ -134,3 +136,7 @@ class AI:
 			for line in self.historyList:
 				print("Writing line: " + line)
 				historyFile.write(line + "\n")
+#ai = AI()
+#ai.addQuery("AAK")
+#ai.addQuery("AAL")
+#ai.writeToFile()
