@@ -80,6 +80,7 @@ class AI:
 		
 	# Adds a query to the search history, returns 1 on success, 0 on failure
 	def addQuery(self, newQuery):
+		newQuery = newQuery.upper()
 		if newQuery in Dict.code_cat: # Check code exists
 			self.historyList = [newQuery] + self.historyList
 			self.historyList = self.historyList[:self.ENTRIES]
@@ -139,4 +140,5 @@ class AI:
 #ai = AI()
 #ai.addQuery("AAK")
 #ai.addQuery("AAL")
+#ai.addQuery("AAl")
 #ai.writeToFile()
