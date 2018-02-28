@@ -6,14 +6,14 @@ from main import *
 try:
     urls = (
         '/', 'index'
-        )
+    )
     app = web.application(urls, globals())
     render = web.template.render('templates/')
-    
+
     class index:
         def GET(self):
             return render.index()
-        
+
         def POST(self):
             data = json.loads(web.data())
             print(data)
@@ -22,7 +22,6 @@ try:
                 #Handling for a message
                 #a.addQuery(self, data['message'])
                 result = main(data['message'])
-                writeToFile()
                 return result
                 #return data['message']
             elif data['type'] == 'suggestMessages':
@@ -37,6 +36,7 @@ try:
 
     if __name__ == "__main__":
         app.run()
+
 except KeyboardInterrupt :
     print("Shutting down")
     writeToFile()
