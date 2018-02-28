@@ -1,4 +1,4 @@
-$(".messages").animate({ scrollTop: $(document).height() }, "fast");
+$(".messages").animate({scrollTop: $('.messages').get(0).scrollHeight}, "fast");
 
 function newMessage(message) {
 	message = $(".message-input input").val();
@@ -8,7 +8,7 @@ function newMessage(message) {
   //Picture needs changing to something for the user
 	$('<li class="sent"><img src="https://i.imgur.com/z12PaJ6.png" alt="" /><p>' + message + '</p></li>').appendTo($('.messages > ul'));
 	$('.message-input input').val(null);
-	$(".messages").animate({ scrollTop: $(document).height() }, "fast");
+	$(".messages").animate({scrollTop: $('.messages').get(0).scrollHeight}, "fast");
 };
 
 function newReply(message) {
@@ -28,12 +28,12 @@ function newReply(message) {
   .then(function(reply) {
 		//Add server response
     $('<li class="replies"><img src="https://www.seoclerk.com/pics/want52167-1vt94o1498116476.png" alt="" /><p>' + reply + '</p></li>').appendTo($('.messages > ul'));
-    $(".messages").animate({ scrollTop: $(document).height() }, "fast");
+    $(".messages").animate({scrollTop: $('.messages').get(0).scrollHeight}, "fast");
   })
 
 }
 //Auto call suggest messages
-//setInterval(suggestMessages, 15000000);
+setInterval(suggestMessages, 15000000);
 function suggestMessages() {
 
 	$('.suggested ul').empty();
@@ -50,11 +50,11 @@ function suggestMessages() {
   .then(response => response.text())
   .then(function(reply) {
     $('<li><p>' + reply + '</p></li>').appendTo($('.messages suggested ul'));
-    $(".messages").animate({ scrollTop: $(document).height() }, "fast");
+    $(".messages").animate({scrollTop: $('.messages').get(0).scrollHeight}, "fast");
   })
 }
 
-//setInterval(getAnomalies, 15000000);
+setInterval(getAnomalies, 15000000);
 function getAnomalies() {
 	fetch('/', {
 		method: 'POST',
@@ -69,7 +69,7 @@ function getAnomalies() {
 	.then(response => response.text())
 	.then(function(reply) {
 		$('<li class="replies"><img src="https://www.seoclerk.com/pics/want52167-1vt94o1498116476.png" alt="" /><p>' + reply + '</p></li>').appendTo($('.messages > ul'));
-    $(".messages").animate({ scrollTop: $(document).height() }, "fast");
+    $(".messages").animate({scrollTop: $('.messages').get(0).scrollHeight}, "fast");
 	})
 
 }
@@ -83,7 +83,7 @@ $('.suggested ul li').click(function(e) {
   //Picture needs changing to something for the user
 	$('<li class="sent"><img src="https://i.imgur.com/z12PaJ6.png" alt="" /><p>' + message + '</p></li>').appendTo($('.messages > ul'));
 	$('.message-input input').val(null);
-	$(".messages").animate({ scrollTop: $(document).height() }, "fast");
+	$(".messages").animate({scrollTop: $('.messages').get(0).scrollHeight}, "fast");
 
   newReply(message);
   suggestMessages();
