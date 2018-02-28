@@ -11,6 +11,12 @@ DR = DatRet()
 NS = NewsSentiment()
 a = AI()
 
+##TO DO##
+#Correct line breaks in news return
+#Perhaps allow high/low/close/open be over a period? (ie. Was was the high price of BP last week?)
+#Change since market opened (ALSO MAKE SURE NO REQUESTED DATES ARE BEFORE THESE ONES)
+
+
 def main(query):
     if query=='':
         return
@@ -99,23 +105,28 @@ def main(query):
         print(DR.current_marketcap(company))
         return "The current Market Capitalisation of "+company+" is £"+str(DR.current_marketcap(company))
     elif intent=="retrieve-news-company":
-        returnarray=[]
+        returnstring="Here's the news on "+company+": \n"
         for article in DR.get_news(company):
             print("URL:"+article['u'])
             print("Snippit:"+article['sp'])
             polarity=NS.getPolarity(article['u'])
             print(polarity)
-            returnarray.append((article['u'], article['sp'], polarity))
-        return returnarray
+
+            returnstring+=article['u']+" \n"
+            returnstring+=article['sp']+" \n"
+            returnstring+=polarity+" \n"
+        return returnstring
     elif intent=="retrieve-news-sector":
-        returnarray=[]
+        returnstring="Here's the news on "+sector+": \n"
         for article in DR.get_news_cat(sector):
             print("URL:"+article['u'])
             print("Snippit:"+article['sp'])
             polarity=NS.getPolarity(article['u'])
             print(polarity)
-            returnarray.append((article['u'], article['sp'], polarity))
-        return returnarray
+            returnstring+=article['u']+" \n"
+            returnstring+=article['sp']+" \n"
+            returnstring+=polarity+" \n"
+        return returnstring
     elif intent=="Open":
         if date!="" and date!=(datetime.now()).strftime("%Y-%m-%d"):
             print(DR.price_data(company, date)[0])
@@ -163,7 +174,10 @@ def main(query):
         print(startenddates)
         startdt=startenddates[0]
         enddt=startenddates[1]
-
+        
+        if startdt==(datetime.now()).strftime("%Y-%m-%d"):
+            startdt=(datetime.now()-timedelta(days=1)).strftime("%Y-%m-%d")
+            
         if enddt=="":
             print(DR.diff(company, start=startdt))
             return "Since "+startdt+", "+company+" has had a £"+str(DR.diff(company, start=startdt)[0])+" price change, and a "+str(DR.diff(company, start=startdt)[1])+"% change"
