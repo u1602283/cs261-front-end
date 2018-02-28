@@ -21,7 +21,9 @@ try:
                     if data['type'] == "newMessage":
                         #Handling for a message
                         #a.addQuery(self, data['message'])
-                        return main(data['message'])
+                        result = main(data['message'])
+                        writeToFile()
+                        return result
                         #return data['message']
                     elif data['type'] == 'suggestMessages':
                         #Handle suggested messages
@@ -38,9 +40,3 @@ try:
 except KeyboardInterrupt :
     print("Shutting down")
     writeToFile()
-
-def exit_handler():
-    writeToFile()
-    print("Shutting down")
-
-atexit.register(exit_handler)
