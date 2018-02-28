@@ -33,7 +33,7 @@ function newReply(message) {
 
 }
 //Auto call suggest messages
-setInterval(suggestMessages, 15000000);
+//setInterval(suggestMessages, 15000000);
 function suggestMessages() {
 
 	$('.suggested ul').empty();
@@ -54,7 +54,7 @@ function suggestMessages() {
   })
 }
 
-setInterval(getAnomalies, 15000000);
+//setInterval(getAnomalies, 15000000);
 function getAnomalies() {
 	fetch('/', {
 		method: 'POST',
