@@ -35,7 +35,7 @@ try:
                 #return a.detectAnomalies(self)
                 anomalies = detectAnomalies()
                 print(anomalies)
-                return
+                return json.dumps(anomalies)
 
     if __name__ == "__main__":
         app.run()
