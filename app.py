@@ -15,7 +15,7 @@ try:
             return render.index()
 
         def POST(self):
-            data = json.loads(web.data())
+            data = json.loads(web.data().decode())
             print(data)
             #Check for the type of request sent
             if data['type'] == "newMessage":
