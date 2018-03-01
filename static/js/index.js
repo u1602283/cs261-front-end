@@ -62,7 +62,7 @@ function suggestMessages() {
 }
 
 
-setInterval(getAnomalies, 30000);
+setInterval(getAnomalies, 3000000);
 function getAnomalies() {
 	fetch('/', {
 		method: 'POST',
@@ -82,7 +82,9 @@ function getAnomalies() {
 			message = array[i][1] + "% change for " + array[i][0] + " since market open"
 			makeSnackbar(message);
 		}
-		showSnackbar();
+		if(reply.length  > 0) {
+			showSnackbar();
+		}
 	})
 
 }
