@@ -22,17 +22,20 @@ try:
                 #Handling for a message
                 #a.addQuery(self, data['message'])
                 result = main(data['message'])
+                writeToFile()
                 return result
                 #return data['message']
             elif data['type'] == 'suggestMessages':
                 #Handle suggested messages
                 #return a.suggestCategories(self, 2)
                 categories = suggestCategories()
-                return categories
+                print(categories)
+                return
             elif data['type'] == 'detectAnomalies':
                 #return a.detectAnomalies(self)
                 anomalies = detectAnomalies()
-                return anomalies
+                print(anomalies)
+                return
 
     if __name__ == "__main__":
         app.run()

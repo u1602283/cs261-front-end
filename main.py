@@ -174,10 +174,10 @@ def main(query):
         print(startenddates)
         startdt=startenddates[0]
         enddt=startenddates[1]
-        
+
         if startdt==(datetime.now()).strftime("%Y-%m-%d"):
             startdt=(datetime.now()-timedelta(days=1)).strftime("%Y-%m-%d")
-            
+
         if enddt=="":
             print(DR.diff(company, start=startdt))
             return "Since "+startdt+", "+company+" has had a £"+str(DR.diff(company, start=startdt)[0])+" price change, and a "+str(DR.diff(company, start=startdt)[1])+"% change"

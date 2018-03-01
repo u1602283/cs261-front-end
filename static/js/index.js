@@ -12,7 +12,8 @@ function newMessage(message) {
 };
 
 function newReply(message) {
-  console.log(message);
+
+	$('<li class="replies"> <div class="spinner"> <div class="rect1"></div><div class="rect2"></div><div class="rect3"></div><div class="rect4"></div><div class="rect5"></div></div></li>').appendTo($('.messages > ul'));
 	//AJAX to server
   fetch('/', {
     method: 'POST',
@@ -27,13 +28,14 @@ function newReply(message) {
   .then(response => response.text())
   .then(function(reply) {
 		//Add server response
+		$('.spinner').remove();
     $('<li class="replies"><img src="https://www.seoclerk.com/pics/want52167-1vt94o1498116476.png" alt="" /><p>' + reply + '</p></li>').appendTo($('.messages > ul'));
     $(".messages").animate({scrollTop: $('.messages').get(0).scrollHeight}, "fast");
   })
 
 }
 //Auto call suggest messages
-setInterval(suggestMessages, 15000000);
+setInterval(suggestMessages, 15000);
 function suggestMessages() {
 
 	$('.suggested ul').empty();
@@ -54,7 +56,7 @@ function suggestMessages() {
   })
 }
 
-setInterval(getAnomalies, 15000000);
+setInterval(getAnomalies, 15000);
 function getAnomalies() {
 	fetch('/', {
 		method: 'POST',
