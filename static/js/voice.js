@@ -42,7 +42,9 @@ recognition.onresult = function(event) {
 $('#start-record-btn').on('click', function(e) {
 	try{
 		recognition.start();
+		document.getElementById("start-record-btn").style.backgroundColor = "red";
 	}catch (e){
 		recognition.stop();
+		document.getElementById("start-record-btn").style.backgroundColor = "#32465a";
 	}
 });

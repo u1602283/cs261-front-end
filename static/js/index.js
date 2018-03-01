@@ -35,7 +35,7 @@ function newReply(message) {
 
 }
 //Auto call suggest messages
-setInterval(suggestMessages, 3000000);
+//setInterval(suggestMessages, 3000000);
 function suggestMessages() {
 
 	$('.suggested ul').empty();
@@ -62,7 +62,7 @@ function suggestMessages() {
 }
 
 
-setInterval(getAnomalies, 3000000);
+//setInterval(getAnomalies, 30000);
 function getAnomalies() {
 	fetch('/', {
 		method: 'POST',
@@ -82,9 +82,7 @@ function getAnomalies() {
 			message = array[i][1] + "% change for " + array[i][0] + " since market open"
 			makeSnackbar(message);
 		}
-		if(reply.length  > 0) {
-			showSnackbar();
-		}
+		showSnackbar();
 	})
 
 }
