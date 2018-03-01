@@ -30,7 +30,7 @@ try:
                 #return a.suggestCategories(self, 2)
                 categories = suggestCategories()
                 print(categories)
-                return
+                return json.dumps(categories)
             elif data['type'] == 'detectAnomalies':
                 #return a.detectAnomalies(self)
                 anomalies = detectAnomalies()

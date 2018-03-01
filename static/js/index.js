@@ -48,15 +48,21 @@ function suggestMessages() {
     headers: {
       'content-type': 'application/json'
     }
-  })
-  .then(response => response.text())
+  }).then(response => response.json())
   .then(function(reply) {
-    $('<li><p>' + reply + '</p></li>').appendTo($('.messages suggested ul'));
-    $(".messages").animate({scrollTop: $('.messages').get(0).scrollHeight}, "fast");
+		$('.messages suggested ul').empty();
+		console.log(reply);
+		for(i = 0; i < reply.length; i++){
+			console.log(reply[i])
+			$('<li><p>' + reply[i] + '</p></li>').appendTo($('.suggested > ul'));
+	    $(".messages").animate({scrollTop: $('.messages').get(0).scrollHeight}, "fast");
+		}
+
   })
 }
 
-setInterval(getAnomalies, 15000);
+
+//setInterval(getAnomalies, 15000);
 function getAnomalies() {
 	fetch('/', {
 		method: 'POST',
