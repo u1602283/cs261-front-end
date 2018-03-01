@@ -91,33 +91,42 @@ def main(query):
 	if intent=="Spot Price":
 		if date=="" and time=="":
 			print(DR.stock_price(company))
-			return "The current spot price of "+company+" is £"+str(DR.stock_price(company))
+			return "The current spot price of "+company+" is "+str(DR.stock_price(company))+"GBX"
 		elif date=="":
 			print(DR.stock_price(company, time=time))
-			return "The spot price of "+company+" at "+time+" was £"+str(DR.stock_price(company, time=time))
+			return "The spot price of "+company+" at "+time+" was "+str(DR.stock_price(company, time=time))+"GBX"
 		elif time=="":
 			print(DR.stock_price(company, date))
-			return "The spot price of "+company+" on "+date+" was £"+str(DR.stock_price(company, date))
+			return "The spot price of "+company+" on "+date+" was "+str(DR.stock_price(company, date))+"GBX"
 		else:
 			print(DR.stock_price(company, date, time))
-			return "The spot price of "+company+" on "+date+" at "+time+" was £"+str(DR.stock_price(company, date, time))
+			return "The spot price of "+company+" on "+date+" at "+time+" was "+str(DR.stock_price(company, date, time))+"GBX"
 	elif intent=="Market Capitalisation":
 		print(DR.current_marketcap(company))
 		return "The current Market Capitalisation of "+company+" is £"+str(DR.current_marketcap(company))
 	elif intent=="retrieve-news-company":
-		returnstring="Here's the news on "+company+": \n"
+		returnstring="Here's some news on "+company+"<br />"
 		for article in DR.get_news(company):
 			print("URL:"+article['u'])
 			print("Snippit:"+article['sp'])
 			polarity=NS.getPolarity(article['u'])
 			print(polarity)
-
-			returnstring+=article['u']+" \n"
-			returnstring+=article['sp']+" \n"
-			returnstring+=polarity+" \n"
+			
+			returnstring+=" <a href = '"+article['u']+"'>"+article['t']+"</a>:<br /><em>"+article['sp']+"</em> - "+article['s']+"<br />"+polarity+"<br />"
 		return returnstring
+		#returnstring="Here's some news on "+company+": <br />"
+		#for article in DR.get_news(company):
+			#print("URL:"+article['u'])
+			#print("Snippit:"+article['sp'])
+			#polarity=NS.getPolarity(article['u'])
+			#print(polarity)
+
+			#returnstring+=article['u']+" \n"
+			#returnstring+=article['sp']+" \n"
+			#returnstring+=polarity+" \n"
+		#return returnstring
 	elif intent=="retrieve-news-sector":
-		returnstring="Here are some news on "+sector+": <br />"
+		returnstring="Here are some news on "+sector+"<br />"
 		for article in DR.get_news_cat(sector):
 			print("URL:"+article['u'])
 			print("Snippit:"+article['sp'])
@@ -130,7 +139,7 @@ def main(query):
 			returnstring+="<a href = '"
 			returnstring+=article['u']
 			returnstring+="'>"
-			returnstring+=article['company'] + "</a> | "
+			returnstring+=article['company']+"</a> - "+article['s']+" | "
 			returnstring+=article['d']
 			returnstring+="<br />"
 			print(article)
@@ -146,33 +155,33 @@ def main(query):
 	elif intent=="Open":
 		if date!="" and date!=(datetime.now()).strftime("%Y-%m-%d"):
 			print(DR.price_data(company, date)[0])
-			return "The open price of "+company+" on "+date+" was £"+str(DR.price_data(company, date)[0])
+			return "The open price of "+company+" on "+date+" was "+str(DR.price_data(company, date)[0])+"GBX"
 		else:
 			print(DR.price_data_today(company)[0])
-			return "The opening price of "+company+" today was £"+str(DR.price_data_today(company)[0])
+			return "The opening price of "+company+" today was "+str(DR.price_data_today(company)[0])+"GBX"
 	elif intent=="Close":
 		if date!="" and date!=(datetime.now()).strftime("%Y-%m-%d"):
 			print(date)
 			print(DR.price_data(company, date)[1])
-			return "The close price of "+company+" on "+date+" was £"+str(DR.price_data(company, date)[1])
+			return "The close price of "+company+" on "+date+" was "+str(DR.price_data(company, date)[1])+"GBX"
 		else:
 			print(DR.price_data_today(company)[1])
-			return "The close price of "+company+" today was £"+str(DR.price_data_today(company)[1])
+			return "The close price of "+company+" today was "+str(DR.price_data_today(company)[1])+"GBX"
 	elif intent=="High":
 		if date!="" and date!=(datetime.now()).strftime("%Y-%m-%d"):
 			print(DR.price_data(company, date)[2])
-			return "The high price of "+company+" on "+date+" was £"+str(DR.price_data(company, date)[2])
+			return "The high price of "+company+" on "+date+" was "+str(DR.price_data(company, date)[2])+"GBX"
 		else:
 			print(DR.price_data_today(company)[2])
-			return "The high price of "+company+" today was £"+str(DR.price_data_today(company)[2])
+			return "The high price of "+company+" today was "+str(DR.price_data_today(company)[2])+"GBX"
 		return
 	elif intent=="Low":
 		if date!="" and date!=(datetime.now()).strftime("%Y-%m-%d"):
 			print(DR.price_data(company, date)[3])
-			return "The low price of "+company+" on "+date+" was £"+str(DR.price_data(company, date)[3])
+			return "The low price of "+company+" on "+date+" was "+str(DR.price_data(company, date)[3])+"GBX"
 		else:
 			print(DR.price_data_today(company)[3])
-			return "The low price of "+company+" today was £"+str(DR.price_data_today(company)[3])
+			return "The low price of "+company+" today was "+str(DR.price_data_today(company)[3])+"GBX"
 	elif intent=="Volume":
 		if date!="" and date!=(datetime.now()).strftime("%Y-%m-%d"):
 			print(DR.price_data(company, date)[4])
@@ -196,10 +205,10 @@ def main(query):
 
 		if enddt=="":
 			print(DR.diff(company, start=startdt))
-			return "Since "+startdt+", "+company+" has had a £"+str(DR.diff(company, start=startdt)[0])+" price change, and a "+str(DR.diff(company, start=startdt)[1])+"% change"
+			return "Since "+startdt+", "+company+" has had a "+str(DR.diff(company, start=startdt)[0])+"GBX price change, and a "+str(DR.diff(company, start=startdt)[1])+"% change"
 		else:
 			print(DR.diff(company, start=startdt, end=enddt))
-			return "Between "+startdt+" and "+enddt+", "+company+" has had a £"+str(DR.diff(company, start=startdt, end=enddt)[0])+" price change, and a "+str(DR.diff(company, start=startdt, end=enddt)[1])+"% change"
+			return "Between "+startdt+" and "+enddt+", "+company+" has had a "+str(DR.diff(company, start=startdt, end=enddt)[0])+"GBX price change, and a "+str(DR.diff(company, start=startdt, end=enddt)[1])+"% change"
 	return ("This is the catch-all return at the end of the main function")
 
 #Function for determining start/end dates of difference function
