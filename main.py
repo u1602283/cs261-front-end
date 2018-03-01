@@ -9,7 +9,7 @@ from AI import *
 CLIENT_ACCESS_TOKEN='ee339c04a181469aba3549870dfeca5e'
 DR = DatRet()
 NS = NewsSentiment()
-a = AI()
+a = AI(ANOMALY_THREASHOLD = 0) # TEST
 
 ##TO DO##
 #Correct line breaks in news return
