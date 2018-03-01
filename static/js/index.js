@@ -77,12 +77,12 @@ function getAnomalies() {
 	.then(response => response.json())
 	.then(function(reply) {
 		array = Array.from(reply);
+		clearSnackbar();
 		for(i = 0; i < reply.length; i++){
-			makeSnackbar(array[i][0]);
-			$('<li class="replies"><img src="https://www.seoclerk.com/pics/want52167-1vt94o1498116476.png" alt="" /><p> Code: ' + reply[i][0] + ' Diff:' + reply[i][1] + '</p></li>').appendTo($('.messages > ul'));
-	    $(".messages").animate({scrollTop: $('.messages').get(0).scrollHeight}, "fast");
+			message = array[i][1] + "% change for " + array[i][0] + " since market open"
+			makeSnackbar(message);
 		}
-
+		showSnackbar();
 	})
 
 }
@@ -120,12 +120,18 @@ $(window).on('keydown', function(e) {
 });
 function makeSnackbar(message) {
     // Get the snackbar DIV
-    var x = document.getElementById("snackbar")
-		$('#snackbar').empty();
-		$(message).appendTo($('#snackbar'));
-    // Add the "show" class to DIV
-    x.className = "show";
 
-    // After 3 seconds, remove the show class from DIV
-    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+		$('.popup').append('<li>' + message + '</li>');
+
+}
+function showSnackbar(){
+	var x = document.getElementById("snackbar")
+	// Add the "show" class to DIV
+	x.className = "show";
+	// After 3 seconds, remove the show class from DIV
+	setTimeout(function(){ x.className = x.className.replace("show", ""); }, 10000);
+
+}
+function clearSnackbar(){
+	$('.popup').empty();
 }
