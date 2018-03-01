@@ -35,7 +35,7 @@ function newReply(message) {
 
 }
 //Auto call suggest messages
-setInterval(suggestMessages, 15000);
+setInterval(suggestMessages, 3000000);
 function suggestMessages() {
 
 	$('.suggested ul').empty();
@@ -54,7 +54,7 @@ function suggestMessages() {
 		console.log(reply);
 		for(i = 0; i < reply.length; i++){
 			console.log(reply[i])
-			$('<li><p>' + reply[i] + '</p></li>').appendTo($('.suggested > ul'));
+			$('<li> <p>' + reply[i] + '</p> </li>').appendTo($('.suggested > ul'));
 	    $(".messages").animate({scrollTop: $('.messages').get(0).scrollHeight}, "fast");
 		}
 
@@ -62,27 +62,29 @@ function suggestMessages() {
 }
 
 
-//setInterval(getAnomalies, 15000);
+setInterval(getAnomalies, 15000);
 function getAnomalies() {
 	fetch('/', {
 		method: 'POST',
 		body: JSON.stringify({
-			type: 'anomalies',
+			type: 'detectAnomalies',
 			message: 'message'
 		}),
 		headers: {
 			'content-type': 'application/json'
 		}
 	})
-	.then(response => response.text())
+	.then(response => response.json())
 	.then(function(reply) {
+		Array.from(reply);
+		console.log(reply);
 		$('<li class="replies"><img src="https://www.seoclerk.com/pics/want52167-1vt94o1498116476.png" alt="" /><p>' + reply + '</p></li>').appendTo($('.messages > ul'));
     $(".messages").animate({scrollTop: $('.messages').get(0).scrollHeight}, "fast");
 	})
 
 }
 
-$('.suggested ul li').click(function(e) {
+$('.suggested ul').on('click','li', function(e) {
   //Send suggested message to api
   message = $(this).text();
 	if($.trim(message) == '') {
