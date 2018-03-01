@@ -126,11 +126,11 @@ def main(query):
 			if polarity == "This article seems to be positive":
 				returnstring+="+ "
 			else:
-				returnstring+="- "
+				returnstring+="&minus;  "
 			returnstring+="<a href = '"
 			returnstring+=article['u']
 			returnstring+="'>"
-			returnstring+=article['company'] + "</a> - "
+			returnstring+=article['company'] + "</a> | "
 			returnstring+=article['d']
 			returnstring+="<br />"
 			print(article)
