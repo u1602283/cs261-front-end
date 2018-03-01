@@ -109,10 +109,15 @@ def main(query):
 		for article in DR.get_news(company):
 			print("URL:"+article['u'])
 			print("Snippit:"+article['sp'])
-			polarity=NS.getPolarity(article['u'])
-			print(polarity)
+			score=NS.getScore(article['u'])
+			print("Score: "+str(score))
 			
-			returnstring+=" <a href = '"+article['u']+"'>"+article['t']+"</a>:<br /><em>"+article['sp']+"</em> - "+article['s']+"<br />"+polarity+"<br />"
+			returnstring+=" <a href = '"+article['u']+"'>"+article['t']+"</a>:<br />"+article['sp']+" - "+article['s']+"<br />This article seems to be "+str(round(score*100, 1))+"% "
+			if score < 0:
+				returnstring+="negative"
+			else:
+				returnstring+="positive"
+			returnstring+="<br />"
 		return returnstring
 		#returnstring="Here's some news on "+company+": <br />"
 		#for article in DR.get_news(company):
@@ -126,17 +131,14 @@ def main(query):
 			#returnstring+=polarity+" \n"
 		#return returnstring
 	elif intent=="retrieve-news-sector":
-		returnstring="Here are some news on "+sector+"<br />"
+		returnstring="Here's some news on "+sector+"<br />"
 		for article in DR.get_news_cat(sector):
 			print("URL:"+article['u'])
 			print("Snippit:"+article['sp'])
-			polarity=NS.getPolarity(article['u'])
-			print(polarity)
-			if polarity == "This article seems to be positive":
-				returnstring+="+ "
-			else:
-				returnstring+="&minus;  "
-			returnstring+="<a href = '"
+			symbol=NS.getSymbol(article['u'])
+			print(symbol)
+			returnstring+=symbol
+			returnstring+=" <a href = '"
 			returnstring+=article['u']
 			returnstring+="'>"
 			returnstring+=article['company']+"</a> - "+article['s']+" | "

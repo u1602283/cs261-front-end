@@ -6,11 +6,11 @@
 # class NewsSentiment:
 
 #     def getPolarity(self, url):
-        
+		
 #         extract = client.Summarize({'url': url, 'sentences_number': 5})
 
 #         text = extract['sentences']
-        
+		
 #         sentiment = client.Sentiment({'mode': 'document', 'text': text})
 
 #         if (sentiment['polarity'] == 'positive'):
@@ -23,25 +23,49 @@
 import json
 from watson_developer_cloud import NaturalLanguageUnderstandingV1
 from watson_developer_cloud.natural_language_understanding_v1 \
-  import Features, SentimentOptions
+import Features, SentimentOptions
 
 natural_language_understanding = NaturalLanguageUnderstandingV1(
-  username='ad32de0b-12b9-4596-aadb-bcf62691a5d6',
-  password='0Lrz7bWmjFYp',
-  version='2017-02-27')
+username='ad32de0b-12b9-4596-aadb-bcf62691a5d6',
+password='0Lrz7bWmjFYp',
+version='2017-02-27')
 
 class NewsSentiment:
 
-    def getPolarity(self, articleurl):
+	def getPolarity(self, articleurl):
 
-        try:
-            response = natural_language_understanding.analyze(
-                url=articleurl,
-                features=Features(
-                sentiment=SentimentOptions()),
-                language='en')
+		try:
+			response = natural_language_understanding.analyze(
+				url=articleurl,
+				features=Features(
+				sentiment=SentimentOptions()),
+				language='en')
 
-            #print(json.dumps(response, indent=2))
-            return "This article seems to be "+response['sentiment']['document']['label']
-        except Exception:
-            return "I encountered an error and can't tell whether this article is positive or negative"
+			#print(json.dumps(response, indent=2))
+			print(response)
+			return "This article seems to be "+response['sentiment']['document']['label']
+		except Exception:
+			return "I encountered an error and can't tell whether this article is positive or negative"
+		
+	def getScore(self, articleurl):
+
+		try:
+			response = natural_language_understanding.analyze(
+				url=articleurl,
+				features=Features(
+				sentiment=SentimentOptions()),
+				language='en')
+
+			#print(json.dumps(response, indent=2))
+			return response['sentiment']['document']['score']
+		except Exception:
+			return 0
+	def getSymbol(self, articleurl):
+		score = self.getScore(articleurl)
+		print("Score: " + str(score))
+		if score > 0.3:
+			return "+"
+		elif score < -0.3:
+			return "−"
+		else:
+			return "="
