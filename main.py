@@ -123,6 +123,7 @@ def main(query):
             print("Snippit:"+article['sp'])
             polarity=NS.getPolarity(article['u'])
             print(polarity)
+            returnstring+=article['company']+"\n"
             returnstring+=article['u']+" \n"
             returnstring+=article['sp']+" \n"
             returnstring+=polarity+" \n"

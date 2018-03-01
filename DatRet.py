@@ -6,10 +6,6 @@ from Dict import code_cat
 import pandas
 import time
 
-###TO ADD/CHANGE###
-#CHANGE SINCE OPENING
-#ANY DATES REQUESTED ON A STOCK MUST BE AFTER THEY OPENED
-
 class DatRet:
     param = {
         'q': "", # Stock symbol (ex: "AAPL")
@@ -244,6 +240,8 @@ class DatRet:
                 #Set our pinance variable
                 stock=Pinance("LON:"+item[0])
                 stock.get_news()
+                for article in stock.news_data:
+                    article['company']=item[0]
                 newsarray.extend(stock.news_data)
         return newsarray
         
