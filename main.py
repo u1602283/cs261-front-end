@@ -18,8 +18,6 @@ a = AI(ANOMALY_THREASHOLD = 0) # TEST
 
 
 def main(query):
-	if query=='':
-		return
 
 	ai=apiai.ApiAI(CLIENT_ACCESS_TOKEN)
 	request=ai.text_request()
@@ -211,7 +209,7 @@ def main(query):
 		else:
 			print(DR.diff(company, start=startdt, end=enddt))
 			return "Between "+startdt+" and "+enddt+", "+company+" has had a "+str(DR.diff(company, start=startdt, end=enddt)[0])+"GBX price change, and a "+str(DR.diff(company, start=startdt, end=enddt)[1])+"% change"
-	return ("This is the catch-all return at the end of the main function")
+	return ("Sorry, I didn't understand that query.")
 
 #Function for determining start/end dates of difference function
 def extract_diff_dates(listinput):
