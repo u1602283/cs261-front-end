@@ -107,9 +107,10 @@ class AI:
 		return result
 		
 	# Return a sorted list of anomalous company codes
-	def detectAnomalies(self):
+	def detectAnomalies(self, DICT = False):
 		dr = DatRet()
-		result = []
+		resultList = []
+		resultDict = {}
 		
 		for line in self.suggestCategories(self.NUM_CATEGORIES):
 			print(line)
@@ -123,12 +124,17 @@ class AI:
 				print(data)
 				if abs(data[1]) > self.ANOMALY_THREASHOLD:
 					print(code + " is anomalous")
-					result.append([code, data[1]])
+					resultList.append([code, data[1]])
+					resultDict["code"] = code
+					resultDict["diff"] = data[1]
 				print()
-		print(result)
-		result.sort(key = lambda x: abs(x[1]), reverse = True)
-		print(result)
-		return result
+		resultList.sort(key = lambda x: abs(x[1]), reverse = True)
+		print(resultList)
+		print(resultDict)
+		if DICT == True:
+			return resultDict
+		else:
+			return resultList
 		
 	# Writes the list to a file
 	def writeToFile(self):
@@ -137,8 +143,9 @@ class AI:
 			for line in self.historyList:
 				print("Writing line: " + line)
 				historyFile.write(line + "\n")
-#ai = AI()
+#ai = AI(ANOMALY_THREASHOLD = 0.01)
 #ai.addQuery("AAK")
 #ai.addQuery("AAL")
 #ai.addQuery("AAl")
-#ai.writeToFile()
+#ai.detectAnomalies(DICT = True)
+#ai.detectAnomalies()
