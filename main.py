@@ -28,7 +28,7 @@ def main(query):
     request.query=query
     res=request.getresponse()
 
-    jsonres=json.loads(res.read())
+    jsonres=json.loads(res.read().decode())
 
     company=""
     try:
