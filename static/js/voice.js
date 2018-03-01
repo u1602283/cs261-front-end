@@ -4,6 +4,7 @@ try {
 }
 catch(e) {
   console.error(e);
+  document.getElementById("start-record-btn").style.visibility = "hidden";
 }
 
 var noteContent="";
