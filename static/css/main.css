@@ -318,3 +318,8 @@ a {
   background-repeat: no-repeat;
   background-position: center;
 }
+#frame .content .message-input .wrap #voice-output-btn {
+  background-image: url('https://cdn.discordapp.com/attachments/400378754427256834/418937559305945088/sound-on.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+}
