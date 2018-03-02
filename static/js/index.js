@@ -1,4 +1,5 @@
 $(".messages").animate({scrollTop: $('.messages').get(0).scrollHeight}, "fast");
+output = true;
 
 function newMessage(message) {
 	message = $(".message-input input").val();
@@ -141,13 +142,34 @@ function clearSnackbar(){
 	$('.popup').empty();
 }
 function readOutLoud(message) {
-  var speech = new SpeechSynthesisUtterance();
+	if(output){
+		var speech = new SpeechSynthesisUtterance();
 
-  // Set the text and voice attributes.
-  speech.text = message;
-  speech.volume = 1;
-  speech.rate = 1;
-  speech.pitch = 1;
+		// Set the text and voice attributes.
+		speech.text = message;
+		speech.volume = 1;
+		speech.rate = 1;
+		speech.pitch = 1;
 
-  window.speechSynthesis.speak(speech);
+		window.speechSynthesis.speak(speech);
+
+	}else{
+		return false;
+	}
+
 }
+$('#voice-output-btn').on('click', function(e) {
+	if(output){
+		output=false;
+		document.getElementById("voice-output-btn").style.backgroundColor = "red";
+		document.getElementById("voice-output-btn").style.backgroundImage = "url('https://cdn.discordapp.com/attachments/400378754427256834/418937560815894541/sound-off.svg')";
+
+	}else{
+		output=true;
+		document.getElementById("voice-output-btn").style.backgroundColor = "#32465a";
+		document.getElementById("voice-output-btn").style.backgroundImage = "url('https://cdn.discordapp.com/attachments/400378754427256834/418937559305945088/sound-on.svg')";
+
+
+	}
+
+});
