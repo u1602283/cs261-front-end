@@ -29,6 +29,7 @@ function newReply(message) {
   .then(function(reply) {
 		//Add server response
 		$('.spinner').remove();
+		readOutLoud(reply);
     $('<li class="replies"><img src="https://cdn.discordapp.com/attachments/400378754427256834/418920217104613399/bot.svg" alt="" /><p>' + reply + '</p></li>').appendTo($('.messages > ul'));
     $(".messages").animate({scrollTop: $('.messages').get(0).scrollHeight}, "fast");
   })
@@ -78,6 +79,7 @@ function getAnomalies() {
 	.then(function(reply) {
 		array = Array.from(reply);
 		clearSnackbar();
+		readOutLoud("Anomalies Detected!");
 		for(i = 0; i < reply.length; i++){
 			message = array[i][1] + "% change for " + array[i][0] + " since market open"
 			makeSnackbar(message);
@@ -134,4 +136,15 @@ function showSnackbar(){
 }
 function clearSnackbar(){
 	$('.popup').empty();
+}
+function readOutLoud(message) {
+  var speech = new SpeechSynthesisUtterance();
+
+  // Set the text and voice attributes.
+  speech.text = message;
+  speech.volume = 1;
+  speech.rate = 1;
+  speech.pitch = 1;
+
+  window.speechSynthesis.speak(speech);
 }
