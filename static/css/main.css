@@ -289,9 +289,27 @@ a {
     padding: 16px 0;
   }
 }
-#frame .content .message-input .wrap button:hover {
-  background: #435f7a;
-}
 #frame .content .message-input .wrap button:focus {
   outline: none;
+}
+
+#frame .content .message-input .wrap .submit {
+  background-image: url('https://cdn.discordapp.com/attachments/400378754427256834/418921069622329354/send.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+}
+#frame .content .message-input .wrap .submit:hover {
+  background-image: url('https://cdn.discordapp.com/attachments/400378754427256834/418921069622329354/send.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+}
+#frame .content .message-input .wrap #start-record-btn {
+  background-image: url('https://cdn.discordapp.com/attachments/400378754427256834/418930174743019521/mic.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+}
+#frame .content .message-input .wrap #start-record-btn:hover {
+  background-image: url('https://cdn.discordapp.com/attachments/400378754427256834/418930174743019521/mic.svg');
+  background-repeat: no-repeat;
+  background-position: center;
 }
