@@ -40,7 +40,7 @@ function newReply(message) {
 
 }
 //Auto call suggest messages
-//setInterval(suggestMessages, 3000000);
+setInterval(suggestMessages, 300000);
 function suggestMessages() {
 
 	$('.suggested ul').empty();
@@ -67,7 +67,7 @@ function suggestMessages() {
 }
 
 
-//setInterval(getAnomalies, 30000);
+setInterval(getAnomalies, 300000);
 function getAnomalies() {
 	fetch('/', {
 		method: 'POST',
@@ -143,6 +143,9 @@ function clearSnackbar(){
 }
 function readOutLoud(message) {
 	if(output){
+		if(message.length > 240){
+			return false;
+		}
 		var speech = new SpeechSynthesisUtterance();
 
 		// Set the text and voice attributes.
