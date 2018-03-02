@@ -13,6 +13,9 @@ function newMessage(message) {
 
 function newReply(message) {
 
+	if($.trim(message) == '') {
+		return false;
+	}
 	$('<li class="replies"> <div class="spinner"> <div class="rect1"></div><div class="rect2"></div><div class="rect3"></div><div class="rect4"></div><div class="rect5"></div></div></li>').appendTo($('.messages > ul'));
 	//AJAX to server
   fetch('/', {
