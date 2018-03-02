@@ -280,7 +280,7 @@ a {
   cursor: pointer;
   background: #32465a;
   color: #f5f5f5;
-  
+  height: 37px;
   display: inline-block;
   position: absolute;
 }
@@ -291,6 +291,9 @@ a {
 }
 #frame .content .message-input .wrap button:focus {
   outline: none;
+}
+#frame .content .message-input .wrap button:hover {
+  background: #435f7a;
 }
 
 #frame .content .message-input .wrap .submit {
