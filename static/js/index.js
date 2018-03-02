@@ -6,7 +6,7 @@ function newMessage(message) {
 		return false;
 	}
   //Picture needs changing to something for the user
-	$('<li class="sent"><img src="https://i.imgur.com/z12PaJ6.png" alt="" /><p>' + message + '</p></li>').appendTo($('.messages > ul'));
+	$('<li class="sent"><img src="https://cdn.discordapp.com/attachments/400378754427256834/418920166425100299/user.svg" alt="" /><p>' + message + '</p></li>').appendTo($('.messages > ul'));
 	$('.message-input input').val(null);
 	$(".messages").animate({scrollTop: $('.messages').get(0).scrollHeight}, "fast");
 };
@@ -29,7 +29,7 @@ function newReply(message) {
   .then(function(reply) {
 		//Add server response
 		$('.spinner').remove();
-    $('<li class="replies"><img src="https://www.seoclerk.com/pics/want52167-1vt94o1498116476.png" alt="" /><p>' + reply + '</p></li>').appendTo($('.messages > ul'));
+    $('<li class="replies"><img src="https://cdn.discordapp.com/attachments/400378754427256834/418920217104613399/bot.svg" alt="" /><p>' + reply + '</p></li>').appendTo($('.messages > ul'));
     $(".messages").animate({scrollTop: $('.messages').get(0).scrollHeight}, "fast");
   })
 
@@ -94,7 +94,7 @@ $('.suggested ul').on('click','li', function(e) {
 		return false;
 	}
   //Picture needs changing to something for the user
-	$('<li class="sent"><img src="https://i.imgur.com/z12PaJ6.png" alt="" /><p>' + message + '</p></li>').appendTo($('.messages > ul'));
+	$('<li class="sent"><img src="https://cdn.discordapp.com/attachments/400378754427256834/418920166425100299/user.svg" alt="" /><p>' + message + '</p></li>').appendTo($('.messages > ul'));
 	$('.message-input input').val(null);
 	$(".messages").animate({scrollTop: $('.messages').get(0).scrollHeight}, "fast");
 
