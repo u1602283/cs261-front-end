@@ -83,12 +83,14 @@ function getAnomalies() {
 	.then(function(reply) {
 		array = Array.from(reply);
 		clearSnackbar();
-		readOutLoud("Anomalies Detected!");
 		for(i = 0; i < reply.length; i++){
 			message = array[i][1] + "% change for " + array[i][0] + " since market open"
 			makeSnackbar(message);
 		}
-		showSnackbar();
+		if(reply.length > 0){
+			readOutLoud("Anomalies Detected!");
+			showSnackbar();
+		}
 	})
 
 }
