@@ -122,7 +122,7 @@ class AI:
 				print('print(dr.diff(symbol="code", start=day))')
 				data = dr.diff(symbol=code, start=day)
 				print(data)
-				if abs(data[1]) > self.ANOMALY_THREASHOLD:
+				if abs(data[1])/100 > self.ANOMALY_THREASHOLD:
 					print(code + " is anomalous")
 					resultList.append([code, data[1]])
 					resultDict["code"] = code
