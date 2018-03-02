@@ -9,7 +9,7 @@ from AI import *
 CLIENT_ACCESS_TOKEN='ee339c04a181469aba3549870dfeca5e'
 DR = DatRet()
 NS = NewsSentiment()
-a = AI(ANOMALY_THREASHOLD = 0) # TEST
+a = AI() # TEST
 
 ##TO DO##
 #Correct line breaks in news return
@@ -109,7 +109,7 @@ def main(query):
 			print("Snippit:"+article['sp'])
 			score=NS.getScore(article['u'])
 			print("Score: "+str(score))
-			
+
 			returnstring+=" <a href = '"+article['u']+"'>"+article['t']+"</a>:<br />"+article['sp']+" - "+article['s']+"<br />This article seems to be "+str(round(score*100, 1))+"% "
 			if score < 0:
 				returnstring+="negative"
