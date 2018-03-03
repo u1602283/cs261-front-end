@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from DatRet import *
 from NewsSentiment import *
 from AI import *
+from Dict import code_cat
 
 CLIENT_ACCESS_TOKEN='ee339c04a181469aba3549870dfeca5e'
 DR = DatRet()
@@ -231,6 +232,29 @@ def main(query):
                                 returnstring+="positive"
                         returnstring+="<br />"
                 
+                return returnstring
+        elif intent=="General Query Sectors":
+                returnstring="Constituent prices: <br />"
+                #price of each member
+                for item in code_cat.items():
+                        if item[1]==sector:
+                                company=item[0]
+                                returnstring+=company+" - "+str(DR.stock_price(company))+"GBX <br />"
+                #news stories
+                returnstring+="<br />Here's some news on "+sector+"<br />"
+                for article in DR.get_news_cat(sector):
+                        print("URL:"+article['u'])
+                        print("Snippit:"+article['sp'])
+                        symbol=NS.getSymbol(article['u'])
+                        print(symbol)
+                        returnstring+=symbol
+                        returnstring+=" <a href = '"
+                        returnstring+=article['u']
+                        returnstring+="'>"
+                        returnstring+=article['company']+"</a> - "+article['s']+" | "
+                        returnstring+=article['d']
+                        returnstring+="<br />"               
+
                 return returnstring
         return ("Sorry, I didn't understand that query.")
 
