@@ -187,10 +187,22 @@ class DatRet:
             self.param['x']='UKX'
         self.param['p']='1d'
 
+        #Set the date as today
+        date=(datetime.now()).strftime("%Y-%m-%d")
+
+        #Check if today is a weekend or
+        weekend=False;
+        if datetime.strptime(date, "%Y-%m-%d").strftime("%A")=="Saturday":
+            date=(datetime.strptime(date, "%Y-%m-%d")-timedelta(days=1)).strftime("%Y-%m-%d")
+            weekend=True;
+        elif datetime.strptime(date, "%Y-%m-%d").strftime("%A")=="Sunday":
+            date=(datetime.strptime(date, "%Y-%m-%d")-timedelta(days=2)).strftime("%Y-%m-%d")
+            weekend=True;
+
         data=get_price_data(self.param)
         #Extract data just for this day
         #We want the data for the current day only
-        data=data[(datetime.now()).strftime("%Y-%m-%d")]
+        data=data[date]
 
         #The day open is the open of the first data piece we're given
         dayopen=data.iloc[0]['Open']
@@ -209,6 +221,12 @@ class DatRet:
                 daylow=row['Low']
             if row['High']>dayhigh:
                 dayhigh=row['High']
+
+        #If we're on a weekend, then the highs and lows are going to be the current spot price, and the volume is going to be 0
+        if weekend:
+            dayhigh=dayclose
+            daylow=dayclose
+            dayvol=0
 
         return (dayopen, dayclose, dayhigh, daylow, dayvol)
     
