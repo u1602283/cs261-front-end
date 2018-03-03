@@ -190,7 +190,7 @@ class DatRet:
         #Set the date as today
         date=(datetime.now()).strftime("%Y-%m-%d")
 
-        #Check if today is a weekend or
+        #Check if today is a weekend or not
         weekend=False;
         if datetime.strptime(date, "%Y-%m-%d").strftime("%A")=="Saturday":
             date=(datetime.strptime(date, "%Y-%m-%d")-timedelta(days=1)).strftime("%Y-%m-%d")
@@ -224,6 +224,7 @@ class DatRet:
 
         #If we're on a weekend, then the highs and lows are going to be the current spot price, and the volume is going to be 0
         if weekend:
+            dayclose=self.price_data(symbol, date)[1]
             dayopen=dayclose #The spot price stays constant throughout the day
             dayhigh=dayclose
             daylow=dayclose
