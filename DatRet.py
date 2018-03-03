@@ -224,6 +224,7 @@ class DatRet:
 
         #If we're on a weekend, then the highs and lows are going to be the current spot price, and the volume is going to be 0
         if weekend:
+            dayopen=dayclose #The spot price stays constant throughout the day
             dayhigh=dayclose
             daylow=dayclose
             dayvol=0
