@@ -84,8 +84,8 @@ function getAnomalies() {
 		array = Array.from(reply);
 		clearSnackbar();
 		for(i = 0; i < reply.length; i++){
-			message = array[i][1] + "% change for " + array[i][0] + " since market open"
-			makeSnackbar(message);
+			//message = array[i][1] + "% change for " + array[i][0] + " since market open"
+			makeSnackbar(array[i][1], array[i][0]);
 		}
 		if(reply.length > 0){
 			readOutLoud("Anomalies Detected!");
@@ -113,7 +113,7 @@ $('.suggested ul').on('click','li', function(e) {
 
 $('.submit').click(function() {
   message = $(".message-input input").val();
-  console.log(message)
+  console.log(message);
   newMessage(message);
   newReply(message);
 });
@@ -126,12 +126,19 @@ $(window).on('keydown', function(e) {
     return false;
   }
 });
-function makeSnackbar(message) {
+function makeSnackbar(change, code) {
     // Get the snackbar DIV
-
-		$('.popup').append('<li>' + message + '</li>');
+		$('.popup').append('<li class=\'anomaly_message\' id=' + code + '>' + change + '% change for ' + code + ' since market open' + '</li>');
 
 }
+
+$('.popup').on('click', '.anomaly_message', function(event){
+	message = "Get news on " + event.target.id;
+	console.log(message);
+	newMessage(message);
+	newReply(message);
+});
+
 function showSnackbar(){
 	var x = document.getElementById("snackbar")
 	// Add the "show" class to DIV
