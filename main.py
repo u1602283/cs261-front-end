@@ -206,17 +206,32 @@ def main(query):
 
                 if enddt=="":
                         print(DR.diff(company, start=startdt))
-                        return "Since "+startdt+", "+company+" has had a "+str(DR.diff(company, start=startdt)[0])+"GBX price change, and a "+str(DR.diff(company, start=startdt)[1])+"% change"
+                        data = DR.diff(company, start=startdt)
+                        #return "Since "+startdt+", "+company+" has had a "+str(data[0])+"GBX price change, and a "+str(data[1])+"% change"
+                        if data[0] > 0:
+                                return "Since "+startdt+", "+company+" has changed by +"+str(data[0])+"GBX, +" + str(data[1]) + "%"
+                        else:
+                                return "Since "+startdt+", "+company+" has changed by " + str(data[0]) + "GBX, " + str(data[1]) + "%"
                 else:
                         print(DR.diff(company, start=startdt, end=enddt))
-                        return "Between "+startdt+" and "+enddt+", "+company+" has had a "+str(DR.diff(company, start=startdt, end=enddt)[0])+"GBX price change, and a "+str(DR.diff(company, start=startdt, end=enddt)[1])+"% change"
+                        data = DR.diff(company, start=startdt, end=enddt)
+                        #return "Between "+startdt+" and "+enddt+", "+company+" has had a "+str(DR.diff(company, start=startdt, end=enddt)[0])+"GBX price change, and a "+str(DR.diff(company, start=startdt, end=enddt)[1])+"% change"
+                        if data[0] > 0:
+                                return "Since "+startdt+", "+company+" has changed by +" + str(data[0]) + "GBX, +" + str(data[1]) + "%"
+                        else:
+                                return "Since "+startdt+", "+company+" has changed by " + str(data[0]) + "GBX, " + str(data[1]) + "%"
         elif intent=="General Query Companies":
                 returnstring=""
                 #current price
                 returnstring+="The current spot price of "+company+" is "+str(DR.stock_price(company))+"GBX <br /><br />"
                 #percent change since yesterday
                 startdt=(datetime.now()-timedelta(days=1)).strftime("%Y-%m-%d")
-                returnstring+="Since "+startdt+", "+company+" has had a "+str(DR.diff(company, start=startdt)[0])+"GBX price change, and a "+str(DR.diff(company, start=startdt)[1])+"% change <br /><br />"
+                diffData = DR.diff(company, start=startdt)
+                if diffData[0] > 0:
+                        returnstring += "Since "+startdt+", "+company+" has changed by +" + str(diffData[0]) + "GBX, +" + str(diffData[1]) + "%  <br /><br />"
+                else:
+                        returnstring += "Since "+startdt+", "+company+" has changed by " + str(diffData[0]) + "GBX, " + str(diffData[1]) + "%  <br /><br />"
+                #returnstring+="Since "+startdt+", "+company+" has had a "+str(DR.diff(company, start=startdt)[0])+"GBX price change, and a "+str(DR.diff(company, start=startdt)[1])+"% change <br /><br />"
                 #news
                 returnstring+="Here's some news on "+company+"<br />"
                 for article in DR.get_news(company):

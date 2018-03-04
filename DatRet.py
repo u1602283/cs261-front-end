@@ -128,7 +128,7 @@ class DatRet:
             pricediff=endprice-startprice
             #Calculate percentage change
             percentdiff=pricediff/startprice
-        return (pricediff, percentdiff*100)
+        return (round(pricediff, 2), round(percentdiff*100, 2))
         #end=False => difference in (price, percentage) between start and current
         #end!=False => difference in (price, percentage) between start and end dates     
 
