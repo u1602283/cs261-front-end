@@ -153,8 +153,8 @@ class DatRet:
         self.param['q']=symbol
         self.param['i']='86400'
         self.param['x']='LON'
-        if symbol=="INDEXFTSE":
-            self.param['x']='UKX'
+        if symbol=="UKX":
+            self.param['x']='INDEXFTSE'
         
         self.param['p']=timeamt
 
@@ -183,8 +183,8 @@ class DatRet:
         self.param['q']=symbol
         self.param['i']='60'
         self.param['x']='LON'
-        if symbol=="INDEXFTSE":
-            self.param['x']='UKX'
+        if symbol=="UKX":
+            self.param['x']='INDEXFTSE'
         self.param['p']='1d'
 
         #Set the date as today
@@ -203,7 +203,6 @@ class DatRet:
         #Extract data just for this day
         #We want the data for the current day only
         data=data[date]
-
         #The day open is the open of the first data piece we're given
         dayopen=data.iloc[0]['Open']
         #The day close is simply the current stock price
