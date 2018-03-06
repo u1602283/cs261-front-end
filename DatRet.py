@@ -1,5 +1,5 @@
-from googlefinance.client import get_price_data, get_prices_data, get_prices_time_data
-from pinance import Pinance
+from modules.googlefinance.client import get_price_data, get_prices_data, get_prices_time_data
+from modules.pinance import Pinance
 from datetime import datetime, timedelta
 from marketcapfinder import get_market_cap
 from Dict import code_cat
