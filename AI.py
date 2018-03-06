@@ -118,10 +118,14 @@ class AI:
 				print(code)
 				day = date.today().strftime('%Y-%m-%d')
 				print(day)
-				print('print(dr.diff(symbol="code", start=day))')
-				data = dr.diff(symbol=code, start=day)
+				data_open = dr.price_data_today(code)[0]
+				data_current = dr.stock_price(code)
+				data_diff = data_current - data_open
+				data = []
+				data.append(data_diff)
+				data.append(data_diff/data_open)
 				print(data)
-				if abs(data[1])/100 > self.ANOMALY_THREASHOLD:
+				if abs(data[1]) > self.ANOMALY_THREASHOLD:
 					print(code + " is anomalous")
 					resultList.append([code, data[1]])
 					resultDict["code"] = code
