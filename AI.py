@@ -116,8 +116,7 @@ class AI:
 			print(line)
 			for code in self.getCodes(line):
 				print(code)
-				yesterday = date.today() - timedelta(1)
-				day = yesterday.strftime('%Y-%m-%d')
+				day = date.today().strftime('%Y-%m-%d')
 				print(day)
 				print('print(dr.diff(symbol="code", start=day))')
 				data = dr.diff(symbol=code, start=day)
