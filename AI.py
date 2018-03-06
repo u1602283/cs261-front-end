@@ -127,7 +127,7 @@ class AI:
 				print(data)
 				if abs(data[1]) > self.ANOMALY_THREASHOLD:
 					print(code + " is anomalous")
-					resultList.append([code, data[1]])
+					resultList.append([code, round(data[1]*100, 2)])
 					resultDict["code"] = code
 					resultDict["diff"] = data[1]
 				print()
