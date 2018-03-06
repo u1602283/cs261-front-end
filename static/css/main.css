@@ -35,6 +35,7 @@ body {
   /* left: 50%; Center the snackbar */
   /* bottom: 8rem; 30px from the bottom */
   margin: 0 auto;
+  pointer-events: auto;
 }
 
 /* Show the snackbar when clicking on a button (class added with JavaScript) */
