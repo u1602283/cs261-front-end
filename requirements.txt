@@ -1,3 +1,4 @@
+setuptools==38.5.2
 antiorm==1.2.1
 apiai==1.2.3
 asn1crypto==0.24.0
