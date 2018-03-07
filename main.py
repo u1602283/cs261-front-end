@@ -133,7 +133,7 @@ def main(query):
 						score=NS.getScore(article['u'])
 						print("Score: "+str(score))
 
-						returnstring+=" <a href = '"+article['u']+"' target='_blank'>"+article['t']+"</a>:<br />"+article['sp']+" - "+article['s']+"<br />This article seems to be "+str(round(score*100, 1))+"% "
+						returnstring+=" <a href = '"+article['u']+"' target='_blank'>"+article['t']+"</a>:<br />"+article['sp']+" - "+article['s']+"<br />This article seems to be "+str(abs(round(score*100, 1)))+"% "
 						if score < 0:
 								returnstring+="negative"
 						else:
@@ -259,7 +259,7 @@ def main(query):
 						score=NS.getScore(article['u'])
 						print("Score: "+str(score))
 						
-						returnstring+=" <a href = '"+article['u']+"' target='_blank'>"+article['t']+"</a>:<br />"+article['sp']+" - "+article['s']+"<br />This article seems to be "+str(round(score*100, 1))+"% "
+						returnstring+=" <a href = '"+article['u']+"' target='_blank'>"+article['t']+"</a>:<br />"+article['sp']+" - "+article['s']+"<br />This article seems to be "+str(abs(round(score*100, 1)))+"% "
 						if score < 0:
 								returnstring+="negative"
 						else:
