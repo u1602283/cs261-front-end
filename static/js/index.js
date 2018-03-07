@@ -135,7 +135,7 @@ function makeSnackbar(change, code) {
 $('.popup').on('click', '.anomaly_message', function(event){
 	message = "Get news on " + event.target.id;
 	console.log(message);
-	newMessage(message);
+	$('<li class="sent"><img src="https://cdn.discordapp.com/attachments/400378754427256834/418920166425100299/user.svg" alt="" /><p>' + message + '</p></li>').appendTo($('.messages > ul'));
 	newReply(message);
 });
 
