@@ -278,7 +278,7 @@ class DatRet:
         if daynum<2:
             return "2d"
         if daynum>365:
-            return str(int(float(daynum/265)+1))+"Y"
+            return str(int(float(daynum/365)+1))+"Y"
         elif daynum>30:
             return str(int(float(daynum/30)+1))+"M"
         else:
