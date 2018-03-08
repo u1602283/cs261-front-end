@@ -166,6 +166,7 @@ def main(query):
 						return "The open price of "+company+" on "+date+" was "+str(DR.price_data(company, date)[0])+"GBX"
 				else: #Today
 						data=DR.price_data_today(company)
+						#If no data has been received, this is because the markets have not yet opened
 						if data is None:
 									return "The markets aren't open yet!"
 						#print(DR.price_data_today(company)[0])
@@ -271,7 +272,7 @@ def main(query):
 				
 				return returnstring
 				
-		#General sector quert
+		#General sector query
 		elif intent=="General Query Sectors":
 				returnstring="Constituent prices: <br />"
 				#price of each member
@@ -296,30 +297,40 @@ def main(query):
 
 				return returnstring
 
+		#Which companies in <sector> are rising?
 		elif intent=="Sector Rising":
 			returnstring="The following companies in the sector " + sector + " are rising: <br />"
+			#Loop through all companies
 			for item in code_cat.items():
+					#Find all in the appropriate sector
 					if item[1]==sector:
 							company=item[0]
 							data=DR.price_data_today(company)
+							#If no data has been received, this is because the markets have not yet opened
 							if data is None:
 									return "The markets aren't open yet!"
 							data_open = data[0]
 							data_diff = DR.stock_price(code) - data_open
+							#Find all companies with postiive change since market open
 							if data_diff > 0:
 									returnstring+= company + " - " + data_diff + "GBX, " + str(round(data_diff/data_open, 2)) + " <br />"
 			return returnstring
 
+		#Which companies in <sector> are rising?
 		elif intent=="Sector Falling":
 			returnstring="The following companies in the sector " + sector + " are rising: <br />"
+			#Loop through all companies
 			for item in code_cat.items():
+				#Find all in the appropriate sector
 					if item[1]==sector:
 							company=item[0]
 							data=DR.price_data_today(company)
+							#If no data has been received, this is because the markets have not yet opened
 							if data is None:
 									return "The markets aren't open yet!"
 							data_open = data[0]
 							data_diff = DR.stock_price(code) - data_open
+							#Find all companies with negative change since market open
 							if data_diff < 0:
 									returnstring+= company + " - " + data_diff + "GBX, " + str(round(data_diff/data_open, 2)) + " <br />"
 			return returnstring

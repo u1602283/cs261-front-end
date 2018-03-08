@@ -199,7 +199,9 @@ class DatRet:
             date=(datetime.strptime(date, "%Y-%m-%d")-timedelta(days=2)).strftime("%Y-%m-%d")
             weekend=True;
 
+        #Define the market open time
         marketOpen = datetime.now().replace(hour=8, minute=0, second=0, microsecond=0)
+        #Ensure it isn't before that- can't get the opening price of a closed market!
         if datetime.now() < marketOpen:
             return None
 
