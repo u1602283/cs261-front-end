@@ -199,6 +199,10 @@ class DatRet:
             date=(datetime.strptime(date, "%Y-%m-%d")-timedelta(days=2)).strftime("%Y-%m-%d")
             weekend=True;
 
+        marketOpen = datetime.now().replace(hour=8, minute=0, second=0, microsecond=0)
+        if datetime.now() < marketOpen:
+            return None
+
         data=get_price_data(self.param)
         #Extract data just for this day
         #We want the data for the current day only

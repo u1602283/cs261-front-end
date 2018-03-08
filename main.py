@@ -165,8 +165,11 @@ def main(query):
 						#print(DR.price_data(company, date)[0])
 						return "The open price of "+company+" on "+date+" was "+str(DR.price_data(company, date)[0])+"GBX"
 				else: #Today
+						data=DR.price_data_today(company)
+						if data is None:
+									return "The markets aren't open yet!"
 						#print(DR.price_data_today(company)[0])
-						return "The opening price of "+company+" today was "+str(DR.price_data_today(company)[0])+"GBX"
+						return "The opening price of "+company+" today was "+str(data[0])+"GBX"
 						
 		#Retrieving close price
 		elif intent=="Close":
@@ -297,9 +300,11 @@ def main(query):
 			returnstring="The following companies in the sector " + sector + " are rising: <br />"
 			for item in code_cat.items():
 					if item[1]==sector:
-							print("Relevant company")
 							company=item[0]
-							data_open = DR.price_data_today(company)[0]
+							data=DR.price_data_today(company)
+							if data is None:
+									return "The markets aren't open yet!"
+							data_open = data[0]
 							data_diff = DR.stock_price(code) - data_open
 							if data_diff > 0:
 									returnstring+= company + " - " + data_diff + "GBX, " + str(round(data_diff/data_open, 2)) + " <br />"
@@ -309,9 +314,11 @@ def main(query):
 			returnstring="The following companies in the sector " + sector + " are rising: <br />"
 			for item in code_cat.items():
 					if item[1]==sector:
-							print("Relevant company")
 							company=item[0]
-							data_open = DR.price_data_today(company)[0]
+							data=DR.price_data_today(company)
+							if data is None:
+									return "The markets aren't open yet!"
+							data_open = data[0]
 							data_diff = DR.stock_price(code) - data_open
 							if data_diff < 0:
 									returnstring+= company + " - " + data_diff + "GBX, " + str(round(data_diff/data_open, 2)) + " <br />"
