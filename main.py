@@ -117,7 +117,11 @@ def main(query):
 						return "The spot price of "+company+" on "+date+" was "+str(DR.stock_price(company, date))+"GBX"
 				else: #Specified date and time
 						#print(DR.stock_price(company, date, time))
-						return "The spot price of "+company+" on "+date+" at "+time+" was "+str(DR.stock_price(company, date, time))+"GBX"
+						data=DR.stock_price(company, date, time)
+						if data is None:
+							return "This data is unavailable"
+						else:
+							return "The spot price of "+company+" on "+date+" at "+time+" was "+str(DR.stock_price(company, date, time))+"GBX"
 						
 		#Retrieving market capitalisation
 		elif intent=="Market Capitalisation":
