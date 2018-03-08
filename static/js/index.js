@@ -67,7 +67,7 @@ function suggestMessages() {
 }
 
 
-setInterval(getAnomalies, 300000);
+setInterval(getAnomalies, 120000);
 function getAnomalies() {
 	fetch('/', {
 		method: 'POST',
