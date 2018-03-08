@@ -292,6 +292,31 @@ def main(query):
 						returnstring+="<br />"			   
 
 				return returnstring
+
+		elif intent=="Sector Rising":
+			returnstring="The following companies in the sector " + sector + " are rising: <br />"
+			for item in code_cat.items():
+					if item[1]==sector:
+							print("Relevant company")
+							company=item[0]
+							data_open = DR.price_data_today(company)[0]
+							data_diff = DR.stock_price(code) - data_open
+							if data_diff > 0:
+									returnstring+= company + " - " + data_diff + "GBX, " + str(round(data_diff/data_open, 2)) + " <br />"
+			return returnstring
+
+		elif intent=="Sector Falling":
+			returnstring="The following companies in the sector " + sector + " are rising: <br />"
+			for item in code_cat.items():
+					if item[1]==sector:
+							print("Relevant company")
+							company=item[0]
+							data_open = DR.price_data_today(company)[0]
+							data_diff = DR.stock_price(code) - data_open
+							if data_diff < 0:
+									returnstring+= company + " - " + data_diff + "GBX, " + str(round(data_diff/data_open, 2)) + " <br />"
+			return returnstring
+
 				
 		#Unable to parse query
 		return ("Sorry, I didn't understand that query.")
