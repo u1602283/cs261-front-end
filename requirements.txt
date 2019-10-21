@@ -8,7 +8,7 @@ bs4==0.0.1
 certifi==2018.1.18
 cffi==1.11.4
 chardet==3.0.4
-cryptography==2.1.4
+cryptography==2.3
 DateTime==4.2
 db==0.1.1
 demjson==2.2.4
